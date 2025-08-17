@@ -143,13 +143,20 @@ id="toc-uso-como-gestor-de-paquetes">Uso como gestor de paquetes</a>
 <ul>
 <li><a href="#el-intérprete" id="toc-el-intérprete">El
 intérprete</a></li>
-<li><a href="#tipos-de-datos" id="toc-tipos-de-datos">Tipos de
-datos</a></li>
+<li><a href="#tipos-de-datos" id="toc-tipos-de-datos">Tipos de datos</a>
+<ul>
+<li><a href="#tipos-simples" id="toc-tipos-simples">Tipos
+simples</a></li>
+<li><a href="#conjuntos-de-atributos"
+id="toc-conjuntos-de-atributos">Conjuntos de atributos</a></li>
+<li><a href="#listas" id="toc-listas">Listas</a></li>
+<li><a href="#funciones" id="toc-funciones">Funciones</a></li>
+</ul></li>
 <li><a href="#tipos-de-datos-1" id="toc-tipos-de-datos-1">Tipos de
 datos</a></li>
 <li><a href="#let-bindings" id="toc-let-bindings"><code>let</code>
 <em>bindings</em></a></li>
-<li><a href="#funciones" id="toc-funciones">Funciones</a></li>
+<li><a href="#funciones-1" id="toc-funciones-1">Funciones</a></li>
 <li><a href="#repl" id="toc-repl">REPL</a></li>
 <li><a href="#derivaciones" id="toc-derivaciones">Derivaciones</a></li>
 <li><a href="#el-sistema-module" id="toc-el-sistema-module">El sistema
@@ -388,24 +395,23 @@ comandos.</p>
 <p>El uso de Nix como gestor de paquetes no ha sido nunca el propósito
 principal de sus creadores. Para sacar el máximo provecho de Nix debe
 aprender a crear y gestionar entornos con este. Para esto, debe aprender
-lo básico del propio lenguaje Nix.</p>
-<p>Aunque aquí vamos a seguir el videotutorial titulado Nix From Nothing
-#1, que está bien para una primera aproximación, los conceptos del
-lenguaje Nix vienen mejor explicados en otros tutoriales como <a
-href="https://nix.dev/tutorials/nix-language">el de Nix.dev</a>. Además,
-se tiene como referencia <a
+lo básico del lenguaje Nix.</p>
+<p>Los dos videotutoriales que he seguido aquí son <a
+href="https://www.youtube.com/watch?v=UgrwoAGSPOQ">el de Vimjoyer</a> y
+el <a href="https://www.youtube.com/watch?v=t8ydCYe9Y3M">Nix From
+Nothing #1</a>.</p>
+<p>Más riguroso es <a
+href="https://nixos.org/guides/nix-pills/04-basics-of-language.html">el
+tutorial</a> sobre el lenguaje Nix en la documentación oficial de Nix.
+También, <a href="https://nix.dev/tutorials/nix-language">el tutorial de
+Nix.dev</a>. Además, se tiene como referencia <a
 href="https://nixos.org/manual/nix/stable/language/">lo que explican</a>
 en el manual oficial, que le dará un conocimiento más completo.</p>
-<!-- Mejor, https://nixos.org/guides/nix-pills/04-basics-of-language.html
--->
-<p>Otra muy buena explicación del lenguaje Nix es <a
-href="https://www.youtube.com/watch?v=5D3nUU1OVx8">esta</a>.</p>
-<!-- Es de tipado dinámico. Viene muy bien cierto conocimiento de algún
-lenguaje de paradigma funcional, como Haskell. -->
-<!-- Tutorial seguido: https://www.youtube.com/watch?v=UgrwoAGSPOQ -->
+<p>El lenguaje Nix, tal y como ya se ha dicho, se adhiere mucho al
+paradigma funcional puro. Es bastante parecido a Haskell, por lo que si
+ha programado en este tiene gran parte del <q>recorrido</q> hecho.</p>
 <section id="el-intérprete" class="level2">
 <h2>El intérprete</h2>
-<p>Se trata de un lenguaje TKTK.</p>
 <p>Podríamos entrar al intérprete (también llamados REPL) de Nix con el
 comando <code>nix repl</code>:</p>
 <pre><code>$ nix repl
@@ -427,13 +433,17 @@ class="sourceCode nix"><code class="sourceCode nix"><span id="cb19-1"><a href="#
 </section>
 <section id="tipos-de-datos" class="level2">
 <h2>Tipos de datos</h2>
-<p>El lenguaje Nix cuenta con varios tipos de datos predefinidos
-(<em>built-in</em>, también llamados <em>primitivos</em>). Los tipos de
-datos simples (también llamados <em>atómicos</em>) son: entero
-(<em>integer</em>),</p>
+<p>En cuanto a las características del tipado en Nix, hay que decir que
+se trata de tipado fuerte (<em>strongly typed</em>), pero aun así no
+cuenta con tipado estático sino dinámico (<em>dynamic typed</em>).</p>
+<section id="tipos-simples" class="level3">
+<h3>Tipos simples</h3>
+<p>Cuenta con varios tipos de datos predefinidos (<em>built-in</em>,
+también llamados <em>primitivos</em>). Los tipos de datos simples
+(también llamados <em>atómicos</em>) son: entero (<em>integer</em>),</p>
 <pre><code>nix-repl&gt; 7
 7</code></pre>
-<p>coma flotante (<em>floating point</em>),</p>
+<p>coma (o punto) flotante (<em>floating point</em>),</p>
 <pre><code>nix-repl&gt; 7.1
 7.1</code></pre>
 <p>cadena (<em>string</em>),</p>
@@ -464,6 +474,9 @@ class="sourceCode nix"><code class="sourceCode nix"><span id="cb27-1"><a href="#
   &quot;dos&quot;
   &quot;tres&quot;
 ]</code></pre>
+</section>
+<section id="conjuntos-de-atributos" class="level3">
+<h3>Conjuntos de atributos</h3>
 <p>El tipo de datos predefinido más interesante en Nix es el
 <strong>conjunto de atributos</strong> (<em>attribute set</em>). Se
 trata de algo parecido a los diccionarios de Python o los mapas de
@@ -471,9 +484,9 @@ trata de algo parecido a los diccionarios de Python o los mapas de
 tipo de datos no simple. Un ejemplo sería el siguiente:</p>
 <div class="sourceCode" id="cb29"><pre
 class="sourceCode nix"><code class="sourceCode nix"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">one</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">two</span> <span class="op">=</span> <span class="st">&quot;world&quot;</span><span class="op">;</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">three</span> <span class="op">=</span> <span class="st">&quot;something&quot;</span><span class="op">;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">one</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">two</span> <span class="op">=</span> <span class="st">&quot;world&quot;</span><span class="op">;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">three</span> <span class="op">=</span> <span class="st">&quot;something&quot;</span><span class="op">;</span></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>Veámoslo en el REPL:</p>
 <pre><code>nix-repl&gt; { one = &quot;hello&quot;; two = &quot;world&quot;; three = &quot;something&quot;; }
@@ -483,14 +496,15 @@ class="sourceCode nix"><code class="sourceCode nix"><span id="cb29-1"><a href="#
   two = &quot;world&quot;;
 }</code></pre>
 <p>A veces lo llaman <em>conjunto</em> (<em>set</em>) a secas. Advierta
-el punto y coma al final de cada entrada; es obligatorio. A cada entrada
-se la conoce como <strong>atributo</strong> (<em>attribute</em>).</p>
+el punto y coma al final de cada entrada; este es obligatorio siempre. A
+cada entrada del <q>conjunto</q> (separadas por <code>;</code>) se la
+conoce como <strong>atributo</strong> (<em>attribute</em>). (Lo pongo
+entrecomillado porque realmente no existe en Nix el tipo conjunto.)</p>
 <p>Haciendo una analogía con los diccionarios de Python, cada atributo
 consta de una clave (<em>key</em>), cosa que en Nix llaman <em>nombre de
 atributo</em> (<em>attribute name</em>), y un <em>valor</em>
 (<em>value</em>).</p>
-<p>Advierta que los conjuntos de atributos permiten la
-heterogeneidad,</p>
+<p>Advierta que los conjuntos de atributos pueden ser heterogéneos:</p>
 <pre><code>nix-repl&gt; { one = &quot;hello&quot;; two = &quot;world&quot;; three = 3; }
 {
   one = &quot;hello&quot;;
@@ -521,7 +535,7 @@ siguiente:</p>
 la notación con punto:</p>
 <pre><code>nix-repl&gt; { one = &quot;hello&quot;; two = &quot;world&quot;; }.one
 &quot;hello&quot;</code></pre>
-<p>Tras el punto se indica el nombre del atributo del que queremos
+<p>Tras el punto, se indica el nombre del atributo del que queremos
 obtener el valor.</p>
 <p>Si se fija, hasta ahora únicamente hemos hecho uso de literales
 (<em>literals</em>). Podemos también hacer uso de variables:</p>
@@ -532,11 +546,11 @@ nix-repl&gt; myvar.one
 <p>Advierta que no hemos tenido que especificar el tipo de la
 variable.</p>
 <p>En cada archivo Nix se tiene una única expresión, por lo que lo
-anterior no es algo que pueda encontrar. Es así por tratarse de un
-lenguaje que se adhiere al paradigma funcional puro.</p>
-<p>Si deseamos hacer uso de variables en un archivo Nix, podemos hacer
-uso de una <strong>expresión <em>let</em></strong> (<em>let
-expression</em>). Por ejemplo,</p>
+anterior no es algo que pueda encontrarse en su uso de Nix. Es así por
+tratarse de un lenguaje funcional puro.</p>
+<p>Si deseamos hacer uso de variables en un archivo Nix, tenemos las
+<strong>expresiones <em>let</em></strong> (<em>let expressions</em>).
+Por ejemplo,</p>
 <pre><code>nix-repl&gt; let
               my-var = {
                   one = &quot;hello&quot;;
@@ -544,8 +558,7 @@ expression</em>). Por ejemplo,</p>
               };
           in
 &quot;hello&quot;</code></pre>
-<p>Vamos a dejar ya de usar el REPL. Es preferible ahora poner los
-ejemplos de los archivos Nix. El anterior sería</p>
+<p>Esto mismo, en un archivo Nix seria</p>
 <div class="sourceCode" id="cb37"><pre
 class="sourceCode nix"><code class="sourceCode nix"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">my-var</span> <span class="op">=</span> <span class="op">{</span></span>
@@ -554,57 +567,56 @@ class="sourceCode nix"><code class="sourceCode nix"><span id="cb37-1"><a href="#
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    my<span class="op">-</span>var<span class="op">.</span>one</span></code></pre></div>
-<p>cuya evaluación daría lo siguiente:</p>
-<pre><code>$ nix-instantiate --eval let-expression01.nix
-&quot;hello&quot;</code></pre>
-<p>En la parte <em>let</em> se declaran las variables y, en la parte
+<p>que evaluaría a <code>"hello"</code>.</p>
+<p>En la parte <em>let</em> se declaran las variables y, en la
 <em>in</em>, se hace uso de estas. Por cierto, Nix tiene la propiedad de
 evaluación perezosa (<em>lazy evaluation</em>).</p>
-<p>También podríamos usar una expresión <em>let</em> como un valor en un
-atributo, dentro de un conjunto de atributos:</p>
+<p>También podemos hacer que una expresión <em>let</em> sea un valor en
+un atributo (dentro de un conjunto de atributos):</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">x</span> <span class="op">=</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>            <span class="va">a</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">b</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">y</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="op">}.</span>x</span></code></pre></div>
+<p>que evaluaría a <code>9</code>.</p>
+<p>Opcionalmente, se podría añadir paréntesis (<code>( )</code>)
+alrededor de la expresión <em>let</em>. Aunque no afecta al resultado,
+se usa con el único propósito de hacer más legible el código.</p>
 <div class="sourceCode" id="cb39"><pre
 class="sourceCode nix"><code class="sourceCode nix"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">x</span> <span class="op">=</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    (<span class="va">x</span> <span class="op">=</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>            <span class="va">a</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">b</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span> a <span class="op">+</span> b)<span class="op">;</span></span>
 <span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">y</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
 <span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="op">}.</span>x</span></code></pre></div>
-<pre><code>$ nix-instantiate --eval let-expression01.nix
-9</code></pre>
-<p>Opcionalmente, se podría añadir paréntesis (<code>( )</code>)
-alrededor de la expresión <em>let</em>. No afecta al resultado. Se usa
-con el único propósito de hacer más legible el código.</p>
-<div class="sourceCode" id="cb41"><pre
-class="sourceCode nix"><code class="sourceCode nix"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    (<span class="va">x</span> <span class="op">=</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>            <span class="va">a</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">b</span> <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span> a <span class="op">+</span> b)<span class="op">;</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">y</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="op">}.</span>x</span></code></pre></div>
-<p>Las expresiones <em>let</em> y la <em>in</em> son parseadas
+<p>Las expresiones <em>let</em> y las <em>in</em> son parseadas
 recursivamente hasta que sean evaluadas todas las variables, lo cual
 significa que incluso podemos usar variables en las expresiones de otras
 variables.</p>
-<div class="sourceCode" id="cb42"><pre
-class="sourceCode nix"><code class="sourceCode nix"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    (<span class="va">x</span> <span class="op">=</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>            <span class="va">a</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">b</span> <span class="op">=</span> a <span class="op">+</span> <span class="dv">4</span><span class="op">;</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span> a <span class="op">+</span> b)<span class="op">;</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">y</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="op">}.</span>x</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    (<span class="va">x</span> <span class="op">=</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>            <span class="va">a</span> <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>            <span class="va">b</span> <span class="op">=</span> a <span class="op">+</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">in</span> a <span class="op">+</span> b)<span class="op">;</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">y</span> <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="op">}.</span>x</span></code></pre></div>
 <!-- Por el minuto 4 hay cosas que no he copiado -->
-<p>Advierta que se puede hacer uso de la interpolación de cadena en las
-expresiones <em>let-in</em>.</p>
+<p>Advierta que se puede hacer uso de la interpolación de cadena
+(<em>string interpolation</em>, también llamadas <em>string
+templates</em>) en las expresiones <em>let-in</em>. Se marca con
+<code>${}</code>.</p>
 <pre><code>nix-repl&gt; let nombre = &quot;Carlos&quot;; in &quot;hola, ${nombre}&quot;
 &quot;hola, Carlos&quot;</code></pre>
 <p>En los conjuntos de atributos desearíamos poder hacer uso de la
-recursión para referencias variables entre ellas. Para hacer esto, se
+recursión para referenciar variables entre ellas. Para hacer esto, se
 debe hacer uso de la palabra clave <code>rec</code>, como en el ejemplo
 siguiente:</p>
 <pre><code>nix-repl&gt; { a = 5; b = a + 5; }
@@ -618,10 +630,13 @@ nix-repl&gt; rec { a = 5; b = a + 5; }
   a = 5;
   b = 10;
 }</code></pre>
+</section>
+<section id="listas" class="level3">
+<h3>Listas</h3>
 <p>Volvamos a las listas. Tal y como dijimos, también pueden ser
 heterogéneas:</p>
-<div class="sourceCode" id="cb45"><pre
-class="sourceCode nix"><code class="sourceCode nix"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span> <span class="st">&quot;hello&quot;</span> <span class="dv">4</span> <span class="cn">true</span> <span class="op">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span> <span class="st">&quot;hello&quot;</span> <span class="dv">4</span> <span class="cn">true</span> <span class="op">]</span></span></code></pre></div>
 <p>La separación de los elementos en la lista se marca con espacios.
 Pueden ser uno o más. Los espacios entre los corchetes (que indican que
 se trata de una lista) y los elementos de la lista no tiene por qué
@@ -652,68 +667,92 @@ distintas a las listas; por ejemplo, en conjuntos de atributos:</p>
   five = 5;
   six = 6;
 }</code></pre>
-<p>Ahora, pasemos a las funciones, ya que Nix es un lenguaje que se
-adhiere al paradigma funcional puro. Veamos primero una función muy
-sencilla:</p>
+</section>
+<section id="funciones" class="level3">
+<h3>Funciones</h3>
+<p>Ahora, pasemos a las funciones, ya que Nix es un lenguaje funcional
+puro. Veamos primero una función muy sencilla:</p>
 <pre><code>nix-repl&gt; my-func = a: a + 1
 
 nix-repl&gt; my-func 3
 4</code></pre>
-<p>Nix tiene funciones anónimas (<em>anonymous functions</em> o
-<em>lambda functions</em>). Un ejemplo sería la anterior:
-<code>a: a + 1</code>. La sintaxis es muy sencilla. Se pone el argumento
-seguido del signo de dos puntos y a la derecha se pone la expresión del
-comportamiento de la función.</p>
+<p>Lo primero es la definición (<em>definition</em>) y después ponemos
+la llamada (<em>call</em>) o invocación de la misma.</p>
+<p>Nix tiene funciones anónimas (<em>anonymous functions</em>, también
+llamada <em>funciones lambda</em>, <em>lambda functions</em>). Un
+ejemplo sería la anterior:</p>
+<pre><code>a: a + 1</code></pre>
+<p>La sintaxis es muy sencilla. Se pone el argumento seguido del signo
+de dos puntos, <code>:</code>, y a la derecha se pone el cuerpo
+(<em>body</em>) de la misma.</p>
 <p>Estas pueden usarse como valores que se pueden asignar a variables,
-como se hace en <code>my-func = a: a + 1</code>. Esta funcionalidad
-suele recibir el nombre de <em>funciones de primera clase</em>
-(<em>first-class functions</em>).</p>
-<p>Para tener lo anterior como una sola expresión, la incluiríamos en
-una expresión <em>let-in</em>:</p>
+como se hace en</p>
+<pre><code>my-func = a: a + 1</code></pre>
+<p>Esta funcionalidad suele recibir el nombre de <em>funciones de
+primera clase</em> (<em>first-class functions</em>).</p>
+<p>Para tener lo anterior como una sola expresión (y poder usarla como
+archivo Nix), la incluiríamos en una expresión <em>let-in</em>:</p>
 <pre><code>nix-repl&gt; let my-func = a: a + 1; in my-func 3
 4</code></pre>
 <p>Al respecto de los argumentos de las funciones, en Nix existe la
 restricción de que este solo puede ser uno. Esto no es un problema ya
 que puede hacer lo que en programación funcional llaman
 <em>currying</em>, que consiste en especificar las funciones anidándolas
-unas dentro de otras.</p>
+unas dentro de otras. Por ejemplo,</p>
 <pre><code>nix-repl&gt; let my-func = a: b: (a + 1) * b; in my-func 3 7
 28</code></pre>
 <p>Como estamos haciendo anidación, si pasamos un solo argumento a esa
 función tendremos que la salida será una función solo que con un
 argumento menos, que será sustituido por un valor en concreto. Por
 ejemplo,</p>
-<pre><code>nix-repl&gt; let my-func = a: b: (a + 1) * b; my-func-unwrapped = my-func 3; in my-func-unwrapped 7
-28</code></pre>
-<p>Aquí, la función <code>my-func-unwrapped</code> tiene como valor a la
-función</p>
+<div class="sourceCode" id="cb52"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">my-func</span> <span class="op">=</span> <span class="va">a</span><span class="op">:</span> <span class="va">b</span><span class="op">:</span> <span class="op">(</span>a <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">my-func-unwrapped</span> <span class="op">=</span> my<span class="op">-</span>func <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    my<span class="op">-</span>func<span class="op">-</span>unwrapped <span class="dv">7</span></span></code></pre></div>
+<p>que evalúa a <code>28</code>. Si se fija, aquí la función
+<code>my-func-unwrapped</code> tiene como valor a la función</p>
 <pre><code>b: (3 + 1) * b</code></pre>
 <p>Metafóricamente, sería como pelar una cebolla. Como ve, aunque sirve
-para tener varios argumentos, no llega a ser lo mismo exactamente. La
-otra forma de especificar varios argumentos en una función es haciendo
-uso de un conjunto de atributos como argumento.</p>
-<pre><code>nix-repl&gt; let my-func = { a, b, }: a + b; in my-func { a = 9; b = 15; }
-24</code></pre>
+para tener varios argumentos, no llega a ser lo mismo exactamente.
+Alternativamente, existe otra forma de especificar varios argumentos,
+que se comporta de un modo más parecido a lo que deseamos. Simplemente
+consiste en usar como parámetro o argumento un conjunto de
+atributos.</p>
+<div class="sourceCode" id="cb54"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">my-func</span> <span class="op">=</span> <span class="op">{</span> <span class="va">a</span><span class="op">,</span> <span class="va">b</span><span class="op">,</span> <span class="op">}</span>: a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    my<span class="op">-</span>func <span class="op">{</span> <span class="va">a</span> <span class="op">=</span> <span class="dv">9</span><span class="op">;</span> <span class="va">b</span> <span class="op">=</span> <span class="dv">15</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que evalúa a <code>24</code>. Advierta que se tiene que poner una
+coma después del último parámetro.</p>
+<!-- Inherit -->
 <p>Las funciones en Nix cuentan también con valores predefinidos para
-los argumentos. Se usa el signo de cierre de interrogación,
+los argumentos. Para esto, se usa el signo de cierre de interrogación,
 <code>?</code>.</p>
-<pre><code>nix-repl&gt; let my-func = { a ? 100, b, }: a + b; in my-func { b = 15; }
-115</code></pre>
+<div class="sourceCode" id="cb55"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">my-func</span> <span class="op">=</span> <span class="op">{</span> <span class="va">a</span> <span class="op">?</span> <span class="dv">100</span><span class="op">,</span> <span class="va">b</span><span class="op">,</span> <span class="op">}</span>: a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    my<span class="op">-</span>func <span class="op">{</span> <span class="va">b</span> <span class="op">=</span> <span class="dv">15</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que evalúa a <code>115</code>.</p>
 <p>Como sucede en otros lenguajes, se usa el valor predefinido
 únicamente si no se pasa un valor de forma explícita al parámetro.</p>
 <p>Si añadimos como argumento un signo de tres puntos (como los puntos
-suspensivos, <em>elipsis</em>), cualquier atributo adicional, a partir
-del segundo, será ignorado. Pero si también añadimos a la derecha de ese
-argumento (el conjunto de atributos) el símbolo arroba, <code>@</code>,
-seguido de algún nombre, TKTK.</p>
-<p>Evidentemente, al tratarse de un lenguaje funcional puro, también
-está el tipo de datos función (<em>function</em>). Veamos un
-ejemplo:</p>
+suspensivos, <em>elipsis</em>), <code>...</code>, cualquier atributo
+adicional, a partir del segundo, será ignorado. Pero si también añadimos
+a la derecha de ese argumento (el conjunto de atributos) el símbolo
+arroba, <code>@</code>, seguido de algún nombre, TKTK.</p>
+<!-- Volver a esto. Minuto 7:30 -->
 <div class="sourceCode" id="cb56"><pre
-class="sourceCode nix"><code class="sourceCode nix"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="va">x</span><span class="op">:</span> x <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
-<p>En cuanto a las características del tipado en Nix, hay que decir que
-se trata de tipado fuerte (<em>strongly typed</em>), pero aun así no
-cuenta con tipado estático sino dinámico (<em>dynamic typed</em>).</p>
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">my-func</span> <span class="op">=</span> <span class="op">{</span> <span class="va">a</span> <span class="op">?</span> <span class="dv">100</span><span class="op">,</span> <span class="va">b</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>@<span class="va">args</span><span class="op">:</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> args<span class="op">.</span>c <span class="kw">then</span> a <span class="kw">else</span> b<span class="op">;</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    my<span class="op">-</span>func <span class="op">{</span> <span class="va">b</span> <span class="op">=</span> <span class="dv">15</span><span class="op">;</span> <span class="va">c</span> <span class="op">=</span> <span class="cn">true</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que evalúa a <code>100</code>.</p>
+</section>
 </section>
 <section id="tipos-de-datos-1" class="level2">
 <h2>Tipos de datos</h2>
@@ -795,7 +834,7 @@ de cómo se considere TKTK.</p>
 es decir, no tenemos variables globales y, por tanto, no se puede
 afirmar que el programa ejecutándose pase por estados diversos.</p>
 </section>
-<section id="funciones" class="level2">
+<section id="funciones-1" class="level2">
 <h2>Funciones</h2>
 <p>Nix cuenta también, evidentemente, con funciones. Por ejemplo, así se
 definiría y se invocaría una función que decidimos llamar
