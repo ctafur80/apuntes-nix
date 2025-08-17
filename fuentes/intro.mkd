@@ -10,41 +10,53 @@ despliegue (_deployment_) de _software_ y que tecnologías modernas como los
 contenedores OCI (por ejemplo, los de Docker), no llegaban a solucionar.
 
 Nix surgió como una idea que presentó Eelco Dolstra en [su tesis doctoral][]
-en la Universidad de Utretch.
+en la Universidad de Utretch en 2006.
 
 [su tesis doctoral]: https://edolstra.github.io/pubs/phd-thesis.pdf
 
 Al igual que los contenedores OCI, Nix soluciona el famoso problema de "En
 mi máquina funciona". TKTK.
 
-En realidad, Nix es varias cosas: 1) un lenguaje específico de dominio
-(_domain-specific language_ o DSL), de paradigma funcional puro muy
-inspirado en Haskell, 2) un gestor de paquetes (_package manager_) como
+En realidad, Nix no es una única cosa sino varias: 1) un lenguaje específico
+de dominio (_domain-specific language_ o DSL), de paradigma funcional puro
+muy inspirado en Haskell, 2) un gestor de paquetes (_package manager_) como
 pueden ser Homebrew o APT, y 3) una herramienta para la creación y gestión
 de entornos (_environments_) como alternativa a cosas como los entornos
 `venv` del ecosistema Python o a los contenedores Docker.
 
 Como verá, los entornos de Nix tienen propiedades que los hacen mucho
-mejores a estos otros. De hecho, podríamos considerar que el fin de Nix es
-su uso para entornos. Los otros dos no son más que componentes que sirven
+mejores a sus alternativas. De hecho, podríamos considerar que el fin de Nix
+es su uso para entornos. Los otros dos no son más que componentes que sirven
 para tal fin.
 
 Nix puede incluso hacer uso de contenedores OCI, con lo que podríamos
 saltarnos el uso de un gestor de contenedores como Docker. Hay quien afirma
 que el propio Nix es mejor que Docker a este respecto.
 
-Además de lo mencionado, Nix nos aporta otras cosas. Vamos a hacer un
-resumen de todo lo que nos aporta.
+Nix nos proporciona ciertas propiedades que son deseables en los entornos:
 
 - Reproducibilidad (_reproducibility_).
-- Determinismo (_determinism_). Mejor que el de los contenedores OCI.
-- Mayor orden en el sistema de archivos (_filesystem_).
+- Determinismo (_determinism_). Es mejor que el de los contenedores OCI,
+  sobretodo cuando se habilita la funcionalidad [_flakes_][].
+- Menor "basura" es su sistema de archivos (_filesystem_). Es decir, evita
+  que este, tras instalaciones y desinatalaciones, termine poblado de
+  archivos de configuración que ya no necesita.
 - Mejor a la hora de desarrollar. Al igual que sucede con los contenedores
   OCI, al hacer uso de un entorno, en el sistema desde el que desarrollamos
   TKTK.
 
 Nix no es más seguro que lo demás. Pero sí que puede gestionar contenedores
 en entornos Nix, cosa que puede otorgarle mayor seguridad.
+
+Además de esto, existen ciertos proyectos relacionados con Nix, como una
+distribución de Linux llamada NixOS que lleva la automatización de Nix a
+otro nivel. En esta, puede tener especificado en código Nix, además de todo
+el _software_ que desee instalar en su sistema, todos los ajustes de todo
+ese _software_. Lo que es una maravilla es "levantar" de la "nada" un
+sistema justo como lo desee.
+
+También se tiene a _home manager_, para macOS. TKTK.
+
 
 
 <!--
@@ -58,6 +70,9 @@ activa, se tiene de forma local dicha herramienta. Esto es muy propicio para
 herramientas del tipo de `yt-dlp`, que en realidad son más bien bibliotecas
 (_libraries_). TKTK.
 -->
+
+
+
 
 
 

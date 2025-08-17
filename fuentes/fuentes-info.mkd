@@ -5,26 +5,22 @@
 
 No es recomendable comenzar por la documentación oficial para aprender lo
 básico sobre Nix, pues creo que es bastante inaccesible y no han puesto gran
-cuidado en la pedagogía. No lo digo solo yo; he encontrado a mucha gente que
-sabe mucho más que yo sobre Nix comentar esto mismo.
+cuidado en que sea pedagogía. No lo digo solo yo; he encontrado a mucha
+gente que sabe mucho más que yo sobre Nix comentar esto mismo.
 
 Personalmente, me gustó bastante la [conferencia][conferencia-replit] de un
 empleado de ReplIt. Es fácil de entender. Para adentrarse un poco más en el
 lenguaje Nix y las derivaciones, está muy bien [un vídeo][tutorial-surma-yt]
-de Surma, un creador de contenido de ciencias de la computación.
+en YouTube de Surma. También está bien para adentrarse en el lenguaje Nix
+[un tutorial][tuto-nix-from-nothing] en YouTube de Jake Hamilton.
 
 [conferencia-replit]: https://www.youtube.com/watch?v=TsZte_9GfPE
 [tutorial-surma-yt]: https://www.youtube.com/watch?v=5D3nUU1OVx8
-
-También, pueden estar bien [este tutorial][nix-tutorial-01] y [este
-otro][nix-tutorial-02].
-
-[nix-tutorial-01]: https://www.youtube.com/watch?v=t8ydCYe9Y3M
-[nix-tutorial-02]: https://www.youtube.com/watch?v=5D3nUU1OVx8
+[tuto-nix-from-nothing]: https://www.youtube.com/watch?v=t8ydCYe9Y3M
 
 Para su uso como sustituto de Homebrew o de APT, no es necesario aprender
-mucho sobre Nix, pero, si desea sacarle el máximo partido, deberá comenzar a
-aprender su lenguaje así como la estructura de Nix en su sistema.
+mucho sobre Nix, pero, si desea sacarle el máximo partido, deberá adentrarse
+en el uso del lenguaje Nix así como en la estructura de Nix en su sistema.
 
 La empresa Determinate Systems tiene también un buen tutorial de Nix,
 titulado [Zero to Nix][].

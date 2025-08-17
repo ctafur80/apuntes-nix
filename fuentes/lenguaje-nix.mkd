@@ -18,8 +18,498 @@ más completo.
 [nix-dev-tuto-nix-lang]: https://nix.dev/tutorials/nix-language
 [nix-lang-ref]: https://nixos.org/manual/nix/stable/language/
 
+<!-- Mejor, https://nixos.org/guides/nix-pills/04-basics-of-language.html
+-->
+
 Otra muy buena explicación del lenguaje Nix es
 [esta](https://www.youtube.com/watch?v=5D3nUU1OVx8).
+
+
+
+<!-- Es de tipado dinámico. Viene muy bien cierto conocimiento de algún
+lenguaje de paradigma funcional, como Haskell. -->
+
+
+
+<!-- Tutorial seguido: https://www.youtube.com/watch?v=UgrwoAGSPOQ -->
+
+### El intérprete
+
+Se trata de un lenguaje TKTK.
+
+Podríamos entrar al intérprete (también llamados REPL) de Nix con el comando
+`nix repl`:
+
+```
+$ nix repl
+Nix 2.28.3
+Type :? for help.
+nix-repl>
+```
+
+Podríamos introducir expresiones como la siguiente y nos devuelve la
+evaluación de la misma:
+
+```
+nix-repl> 9 + 9
+18
+```
+
+También podemos evaluar las expresiones almacenadas en un archivo. Por
+ejemplo, si desde nuestro _shell_ (salga del REPL) creamos un archivo
+_expresion.nix_ que contenga la expresión
+
+```nix
+9 + 9
+```
+
+podemos evaluarla con el comando siguiente de su _shell_:
+
+```
+$ nix-instantiate --eval expresion.nix
+18
+```
+
+
+
+
+### Tipos de datos
+
+El lenguaje Nix cuenta con varios tipos de datos predefinidos (_built-in_,
+también llamados _primitivos_). Los tipos de datos simples (también llamados
+_atómicos_) son: entero (_integer_),
+
+```
+nix-repl> 7
+7
+```
+
+coma flotante (_floating point_),
+
+```
+nix-repl> 7.1
+7.1
+```
+
+cadena (_string_),
+
+```
+nix-repl> "cadena"
+"cadena"
+
+nix-repl> ''cadena''
+"cadena"
+```
+
+ruta (_path_),
+
+```
+nix-repl> ./.
+/Users/usuario
+```
+
+buleano (_Boolean_),
+
+```
+nix-repl> true
+true
+```
+
+nulo (_null_),
+
+```
+nix-repl> null
+null
+```
+
+Quizás le llame la atención el tipo de datos ruta. Tiene sentido debido al
+uso de Nix. TKTK.
+
+También es predefinido el tipo de datos lista (_list_), aunque este no es
+simple. Un ejemplo de lista sería el siguiente:
+
+```nix
+[ "uno" "dos" "tres" ]
+```
+
+Veámosla en el REPL:
+
+```
+nix-repl> [ "uno" "dos" "tres" ]
+[
+  "uno"
+  "dos"
+  "tres"
+]
+```
+
+El tipo de datos predefinido más interesante en Nix es el **conjunto de
+atributos** (_attribute set_). Se trata de algo parecido a los diccionarios
+de Python o los mapas de _hash_ en otros lenguajes. Evidentemente, también
+se trata de un tipo de datos no simple. Un ejemplo sería el siguiente:
+
+```nix
+{
+  one = "hello";
+  two = "world";
+  three = "something";
+}
+```
+
+Veámoslo en el REPL:
+
+```
+nix-repl> { one = "hello"; two = "world"; three = "something"; }
+{
+  one = "hello";
+  three = "something";
+  two = "world";
+}
+```
+
+A veces lo llaman _conjunto_ (_set_) a secas. Advierta el punto y coma al
+final de cada entrada; es obligatorio. A cada entrada se la conoce como
+**atributo** (_attribute_).
+
+Haciendo una analogía con los diccionarios de Python, cada atributo consta
+de una clave (_key_), cosa que en Nix llaman _nombre de atributo_
+(_attribute name_), y un _valor_ (_value_).
+
+Advierta que los conjuntos de atributos permiten la heterogeneidad,
+
+```
+nix-repl> { one = "hello"; two = "world"; three = 3; }
+{
+  one = "hello";
+  three = 3;
+  two = "world";
+}
+```
+
+También se permite el anidamiento (_nesting_) de conjuntos de atributos,
+
+
+```
+nix-repl> { one = "hello"; two = "world"; three = "something"; x = { a = 1; b = true; }; }
+{
+  one = "hello";
+  three = "something";
+  two = "world";
+  x = { ... };
+}
+```
+
+Alternativamente, la anidación de conjuntos de atributos se puede
+especificar mediante la notación con punto, como en el ejemplo siguiente:
+
+```
+nix-repl> { one = "hello"; two = "world"; three = "something"; x.a = 1; x = { b = true; }; }
+{
+  one = "hello";
+  three = "something";
+  two = "world";
+  x = { ... };
+}
+```
+
+Ambos evaluarían al mismo conjunto de atributos.
+
+Para tomar un valor de un conjunto de atributos, podemos usar también la
+notación con punto:
+
+```
+nix-repl> { one = "hello"; two = "world"; }.one
+"hello"
+```
+
+Tras el punto se indica el nombre del atributo del que queremos obtener el
+valor.
+
+Si se fija, hasta ahora únicamente hemos hecho uso de literales
+(_literals_). Podemos también hacer uso de variables:
+
+```
+nix-repl> myvar = { one = "hello"; two = "world"; }
+
+nix-repl> myvar.one
+"hello"
+```
+
+Advierta que no hemos tenido que especificar el tipo de la variable.
+
+En cada archivo Nix se tiene una única expresión, por lo que lo anterior no
+es algo que pueda encontrar. Es así por tratarse de un lenguaje que se
+adhiere al paradigma funcional puro.
+
+Si deseamos hacer uso de variables en un archivo Nix, podemos hacer uso de
+una **expresión _let_** (_let expression_). Por ejemplo,
+
+```
+nix-repl> let
+              my-var = {
+                  one = "hello";
+                  two = "world";
+              };
+          in
+"hello"
+```
+
+Vamos a dejar ya de usar el REPL. Es preferible ahora poner los ejemplos de
+los archivos Nix. El anterior sería
+
+```nix
+let
+    my-var = {
+        one = "hello";
+        two = "world";
+    };
+in
+    my-var.one
+```
+
+cuya evaluación daría lo siguiente:
+
+```
+$ nix-instantiate --eval let-expression01.nix
+"hello"
+```
+
+En la parte _let_ se declaran las variables y, en la parte _in_, se hace uso
+de estas. Por cierto, Nix tiene la propiedad de evaluación perezosa (_lazy
+evaluation_).
+
+También podríamos usar una expresión _let_ como un valor en un atributo,
+dentro de un conjunto de atributos:
+
+```nix
+{
+    x =
+        let
+            a = 5;
+            b = 4;
+        in a + b;
+    y = 10;
+}.x
+```
+
+```
+$ nix-instantiate --eval let-expression01.nix
+9
+```
+
+Opcionalmente, se podría añadir paréntesis (`( )`) alrededor de la expresión
+_let_. No afecta al resultado. Se usa con el único propósito de hacer más
+legible el código.
+
+```nix
+{
+    (x =
+        let
+            a = 5;
+            b = 4;
+        in a + b);
+    y = 10;
+}.x
+```
+
+Las expresiones _let_ y la _in_ son parseadas recursivamente hasta que sean
+evaluadas todas las variables, lo cual significa que incluso podemos usar
+variables en las expresiones de otras variables.
+
+```nix
+{
+    (x =
+        let
+            a = 5;
+            b = a + 4;
+        in a + b);
+    y = 10;
+}.x
+```
+
+<!-- Por el minuto 4 hay cosas que no he copiado -->
+
+Advierta que se puede hacer uso de la interpolación de cadena en las
+expresiones _let-in_.
+
+```
+nix-repl> let nombre = "Carlos"; in "hola, ${nombre}"
+"hola, Carlos"
+```
+
+En los conjuntos de atributos desearíamos poder hacer uso de la recursión
+para referencias variables entre ellas. Para hacer esto, se debe hacer uso
+de la palabra clave `rec`, como en el ejemplo siguiente:
+
+```
+nix-repl> { a = 5; b = a + 5; }
+error: undefined variable 'a'
+       at «string»:1:14:
+            1| { a = 5; b = a + 5; }
+             |              ^
+
+nix-repl> rec { a = 5; b = a + 5; }
+{
+  a = 5;
+  b = 10;
+}
+```
+
+Volvamos a las listas. Tal y como dijimos, también pueden ser heterogéneas:
+
+```nix
+[ "hello" 4 true ]
+```
+
+La separación de los elementos en la lista se marca con espacios. Pueden ser
+uno o más. Los espacios entre los corchetes (que indican que se trata de una
+lista) y los elementos de la lista no tiene por qué hacerse con espacios
+entre ambos, pero se suele seguir la regla de estilo de poner ahí un
+espacio.
+
+Algo que se puede usar también en las listas es la palabra clave `with`.
+Gracias a esta, tenemos una forma alternativa de expresar una expresión
+_let-in_. Por ejemplo,
+
+```
+nix-repl> with { a = 5; b = 6; c = 7; }; [ "hello" 4 a b ]
+[
+  "hello"
+  4
+  5
+  6
+]
+```
+
+que sería lo mismo que lo siguiente:
+
+```
+nix-repl> let a = 5; b = 6; c = 7; in [ "hello" 4 a b ]
+[
+  "hello"
+  4
+  5
+  6
+]
+```
+
+La palabra clave `with` puede usarse en otras estructuras distintas a las
+listas; por ejemplo, en conjuntos de atributos:
+
+```
+nix-repl> with { a = 5; b = 6; c = 7; }; { five = a; six = b; }
+{
+  five = 5;
+  six = 6;
+}
+```
+
+Ahora, pasemos a las funciones, ya que Nix es un lenguaje que se adhiere al
+paradigma funcional puro. Veamos primero una función muy sencilla:
+
+```
+nix-repl> my-func = a: a + 1
+
+nix-repl> my-func 3
+4
+```
+
+Nix tiene funciones anónimas (_anonymous functions_ o _lambda functions_).
+Un ejemplo sería la anterior: `a: a + 1`. La sintaxis es muy sencilla. Se
+pone el argumento seguido del signo de dos puntos y a la derecha se pone la
+expresión del comportamiento de la función.
+
+Estas pueden usarse como valores que se pueden asignar a variables, como se
+hace en `my-func = a: a + 1`. Esta funcionalidad suele recibir el nombre de
+_funciones de primera clase_ (_first-class functions_).
+
+Para tener lo anterior como una sola expresión, la incluiríamos en una
+expresión _let-in_:
+
+```
+nix-repl> let my-func = a: a + 1; in my-func 3
+4
+```
+
+Al respecto de los argumentos de las funciones, en Nix existe la restricción
+de que este solo puede ser uno. Esto no es un problema ya que puede hacer lo
+que en programación funcional llaman _currying_, que consiste en especificar
+las funciones anidándolas unas dentro de otras.
+
+```
+nix-repl> let my-func = a: b: (a + 1) * b; in my-func 3 7
+28
+```
+
+Como estamos haciendo anidación, si pasamos un solo argumento a esa función
+tendremos que la salida será una función solo que con un argumento menos,
+que será sustituido por un valor en concreto. Por ejemplo,
+
+```
+nix-repl> let my-func = a: b: (a + 1) * b; my-func-unwrapped = my-func 3; in my-func-unwrapped 7
+28
+```
+
+Aquí, la función `my-func-unwrapped` tiene como valor a la función
+
+```
+b: (3 + 1) * b
+```
+
+Metafóricamente, sería como pelar una cebolla. Como ve, aunque sirve para
+tener varios argumentos, no llega a ser lo mismo exactamente. La otra forma
+de especificar varios argumentos en una función es haciendo uso de un
+conjunto de atributos como argumento.
+
+```
+nix-repl> let my-func = { a, b, }: a + b; in my-func { a = 9; b = 15; }
+24
+```
+
+Las funciones en Nix cuentan también con valores predefinidos para los
+argumentos. Se usa el signo de cierre de interrogación, `?`.
+
+```
+nix-repl> let my-func = { a ? 100, b, }: a + b; in my-func { b = 15; }
+115
+```
+
+Como sucede en otros lenguajes, se usa el valor predefinido únicamente si no
+se pasa un valor de forma explícita al parámetro.
+
+Si añadimos como argumento un signo de tres puntos (como los puntos
+suspensivos, _elipsis_), cualquier atributo adicional, a partir del segundo,
+será ignorado. Pero si también añadimos a la derecha de ese argumento (el
+conjunto de atributos) el símbolo arroba, `@`, seguido de algún nombre,
+TKTK.
+
+
+
+
+
+
+
+
+
+
+
+
+Evidentemente, al tratarse de un lenguaje funcional puro, también está el
+tipo de datos función (_function_). Veamos un ejemplo:
+
+```nix
+x: x + 1
+```
+
+En cuanto a las características del tipado en Nix, hay que decir que se
+trata de tipado fuerte (_strongly typed_), pero aun así no cuenta con tipado
+estático sino dinámico (_dynamic typed_).
+
+
+
+
+
+
 
 
 
