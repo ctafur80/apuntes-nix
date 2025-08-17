@@ -1,0 +1,78 @@
+
+
+
+
+
+### _Flakes_ y el comando `nix`
+
+Nix incorporó una funcionalidad llamada _flakes_ que supone un gran salto en
+la forma de funcionar de este. Con _flakes_ tenemos a un Nix más
+determinista y lleva un paso más allá la filosofía de Nix.
+
+Por ejemplo, si no usa _flakes_ los paquetes que tenga serán de la versión
+que indique o TKTK.
+
+El inconveniente de usar _flakes_ es que para su uso requiere de añadir una
+capa más de conocimiento. Por tanto, lo más recomendable es que, antes de
+pasarse a usar Nix mediante la interfaz _flakes_, aprenda a usar Nix del
+modo tradicional.
+
+Para actualizar los paquetes, el comando que debe usar es
+
+```
+$ nix-channel --update
+```
+
+El inconveniente de usar _flakes_ es que para su uso requiere de añadir una
+capa más de conocimiento. Por tanto, lo más recomendable es que, antes de
+pasarse a usar Nix mediante la interfaz _flakes_, aprenda a usar Nix del
+modo tradicional.
+
+El uso de _flakes_ suele venir asociado a lo que se suele llamar "el comando
+`nix`", que no es más que una modernización de los comandos de Nix. En la
+forma antigua, se suelen usar comandos de la forma `nix-<algo>`, mientras
+que, en la nueva (haciendo uso del comando `nix`), se usa un solo comando,
+`nix`, junto con subcomandos. Por ejemplo,
+
+```
+$ nix profile list
+```
+
+que listaría los paquetes instalados mediante Nix.
+
+Si ha instalado Nix mediante la distribución de Determinate Systems, tendrá
+habilitados tanto los _flakes_ como el comando `nix`; no tendrá que hacer
+nada a este respecto. Sin embargo, si ha hecho la instalación tradicional,
+deberá especificarlo con la línea siguiente en el archivo de configuración
+de Nix:
+
+```
+experimental-features = nix-command flakes
+```
+
+Dicho archivo puede encontrarse en diversos sitios, según el sistema
+operativo y el tipo de instalación (de Nix): de un solo usuario o de todo el
+sistema (_systemwide_). En el primer caso, podría estar en
+_\~/.config/nix/nix.conf_, mientras que, en el segundo, en
+_/etc/nix/nix.conf_. (Recuerde que la recomendada es la instalación para
+todo el sistema.)
+
+También, suelo especificar que se cree en el sistema el grupo de Nix,
+llamado `nixbld`:
+
+```
+build-users-group = nixbld
+```
+
+Deberá añadir también a su usuario a ese grupo:
+
+```
+# usermod -aG nixbld <usuario>
+```
+
+Por supuesto, estamos hablando de sistemas de tipo Unix, como, por ejemplo,
+Linux y macOS. En Windows, para instalar Nix deberá hacer uso de WSL2.
+
+
+
+

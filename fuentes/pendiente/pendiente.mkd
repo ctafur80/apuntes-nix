@@ -1,0 +1,296 @@
+
+
+
+
+
+
+
+
+
+Si lo que deseas es hacer una instalación personalizada, puedes seguir [este
+tutorial](https://bmcgee.ie/posts/2022/12/setting-up-my-new-laptop-nix-style/).
+
+
+
+
+Esto es solo una prueba que estoy haciendo. Ahora, vamos a añadir un par de
+cosas.
+
+
+---
+
+
+Un buen tutorial para principiantes con Nix y NixOS es el que ha creado en
+forma de videotutoriales [Chris Titus][c-titus-nixos-tuto], que tiene un
+canal en YouTube en el que habla mucho de Linux. También parece que está muy
+bien [este otro tutorial].
+
+[c-titus-nixos-tuto]: https://christitus.com/nixos-explained/
+[este otro tutorial]: https://thiscute.world/en/posts/nixos-and-flake-basics
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Gestión de Nix
+
+
+
+### Instalación de Nix
+
+
+
+#### En WSL
+
+<https://www.youtube.com/watch?v=HnoP7JZn2MQ>.
+
+
+
+
+### Actualización de Nix
+
+La actualización de la instalación de Nix se hace con
+
+    $ nix upgrade-nix
+
+
+
+
+## Gestión de paquetes
+
+
+### Listar paquetes instalados
+
+Para listar los paquetes instalados:
+
+    $ nix profile list
+
+También, si lo prefiere, puede especificar el perfil en concreto. Se hace
+con la bandera `--profile` o su forma reducida: `-p`.
+
+
+
+
+### Actualizar canales
+
+Antes de actualizar los paquetes, se deben actualizar los canales
+(_channels_) de Nix para un perfil en concreto. La forma en la que lo hago
+es a la antigua, es decir:
+
+    $ nix-channel --update
+
+
+
+### Actualizar paquetes instalados
+
+La actualización de los paquetes instalados se hace con:
+
+    $ nix profile upgrade --impure ".*"
+
+La bandera `--impure` se usa en macOS. En Linux no hace falta.
+
+
+
+También hay que añadir el canal
+
+```
+$ nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
+```
+
+Tras esto, si actualiza la lista de canales
+
+```
+$ nix-channel --update
+```
+
+y luego actualiza todos los paquetes,
+
+```
+$ nix profile upgrade ".*"
+```
+
+se tendrán todos los paquetes a la versión que corresponde a su lista de
+canales.
+
+
+
+
+### Eliminar paquetes
+
+Para eliminar un paquete, lo primero será listarlo para averiguar el número
+que tiene asignado. Luego,
+
+    $ nix profile remove <número>
+
+
+
+
+### Limpiar paquetes
+
+Para limpiar las instalaciones que ya no usa:
+
+    $ nix-collect-garbage -d
+
+Otra cosa que interesa hacer, para que la carpeta _/nix_ no termine por
+ocupar demasiado espacio en nuestro disco duro, es optimizar las
+instalaciones. Esto se ordena con el comando
+
+    $ nix store optimise
+
+
+
+
+
+
+### Mostrar paquetes instalados
+
+Cuando se usa el modo flakes, es más incómodo consultar los paquetes
+instalados. Se puede obtener un listado más limpio haciendo lo siguiente en
+un _shell_ de Unix:
+
+    $ nix profile list | awk '{print $3}' | rev | cut -d'.' -f 1 | rev
+
+
+
+
+
+## Otros
+
+
+### Problema con el _rootless_ de macOS
+
+Algo que suele suceder al tener el gestor de paquetes Nix en macOS, ahora
+que dicho sistema operativo lo han hecho _rootless_[^sip], es que, tras
+actualizarlo (el sistema operativo), se suele limpiar también el archivo de
+configuración global del _shell_, es decir, los archivos _/etc/bashrc_,
+_/etc/zshrc_, etc.
+
+[^sip]: más técnicamente, se dice que tiene _system integrity protection_,
+  SIP
+
+Esto no le afectará si tiene una instalación de Nix para un solo usuario
+(_single-user_). Sin embargo, si tiene una instalación multiusuario, sí le
+afectará y el sistema entonces no sabrá dónde encontrar los ejecutables del
+_software_ que instaló mediante Nix.
+
+Concretamente, lo que desaparece del archivo de configuración global del
+_shell_ es algo como lo siguiente:
+
+```bash
+# Nix
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+    '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+# End Nix
+```
+
+El _rootless_, además de resetear algunos de estos archivos en _/etc_,
+impide que se puedan modificar. Por tanto, para poder volver a añadir ese
+_sourcing_ en el archivo de configuración del _shell_, debe deshabilitar
+temporalmente el _rootless_. Esto se hace siguiendo los pasos siguientes:
+
+1. Apagar el sistema.
+
+2. Arrancar el sistema en modo recuperación. Para esto, debe mantener
+   pulsada la combinación de teclas [Ctrl]{.kbd} + [r]{.kbd} y, sin soltar,
+   pulsar el botón de arranque del sistema. Hay que dejar la combinación
+   pulsada hasta que aparezca el logo de Apple. Por cierto, si en su sistema
+   tiene cambiada la tecla modificadora [Cmd]{.kbd}, tendrá que ser
+   consciente de que esa modificación aquí no se tendrá en cuenta, es decir,
+   tendrá que usar su ubicación predeterminada, es decir, será la tecla
+   adyacente a la barra especiadora.
+
+3. Una vez que inicie el sistema, pinche, en la barra de menús de arriba del
+   todo, en Utitilies. Entre las opciones que aparecen al desplegarse el
+   menú, pinche en Terminal. Se abrirá entonces una ventana del terminal
+   predeterminado de macOS.
+
+4. En dicho terminal introduzca
+
+   ```
+   csrutil disable
+   ```
+
+   para deshabilitar el _rootless_. Puede comprobar si se ha llevado a cabo, con
+
+   ```
+   csrutil status
+   ```
+
+   pero esto le indicará que, hasta que no reinicie, no habrá cambiado.
+
+5. Finalmente, introduzca `reboot` en el terminal, para reiniciar el
+   sistema; también puede reiniciar pinchando con el ratón, si lo prefiere.
+
+Ahora, tras el arranque, ya podrá modificar la parte del sistema de archivos
+exterior a los usuarios.
+
+Luego, por seguridad, debería volver a habilitar el _rootless_. Se hace
+igual que el deshabilitarlo solo que con
+
+    $ csrutil enable
+
+Debe hacerlo, al igual que para deshabilitarlo, desde el modo recuperación
+del sistema.
+
+
+
+
+
+## Flakes
+
+Los nuevos comandos de Nix siguen siendo una funcionalidad experimental.
+
+En macOS, se configura en _/etc/nix/nix.conf_ y se debe añadir algo como lo
+siguiente:
+
+```
+experimental-features = nix-command flakes
+```
+
+Entonces, ya podrá usar los comandos nuevos.
+
+
+
+
+## `home-manager`
+
+Creo que tienen relación con los Flakes. El propósito de `home-manager` es
+tener en macOS algo parecido a NixOS, es decir, hacer en un archivo la
+configuración del _software_ de forma declarativa. Como es evidente, no
+llega a instalar todo lo que se puede instalar con NixOS, pues no se puede
+gestionar el _software_ del sistema, aunque también es cierto que se pueden
+especificar parámetros de `launchd`.
+
+[Aquí][home-manager-tuto] explican muy bien cómo instalar y configurar
+`home-manager` para macOS. Así, puede hacer la gestión de _software_ en su
+sistema de forma declarativa.
+
+[home-manager-tuto]: https://juliu.is/tidying-your-home-with-nix/
+
+
+
+
+
+
+
+
+
+
+
+
+
+

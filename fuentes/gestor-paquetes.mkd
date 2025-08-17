@@ -1,0 +1,124 @@
+
+
+
+## Uso como gestor de paquetes
+
+Antes de pasar a hablar de entornos y del lenguaje Nix, veamos su uso como
+un simple gestor de paquetes, es decir, como alternativa a cosas como
+Homebrew o APT.
+
+
+
+
+### Sin _flakes_
+
+Instalar un paquete.
+
+Para instalar un paquete, se usa el comando
+
+```
+$ nix-env -iA nixpkgs.<paquete>
+```
+
+pero antes de esto deberá actualizar la base de datos con el _software_ en
+TKTK:
+
+```
+$ nix-channel --update
+```
+
+Eliminar un paquete.
+
+```
+$ nix-env --uninstall <paquete>
+```
+
+
+Actualizar un paquete.
+
+```
+$ nix-env --upgrade <paquete>
+```
+
+Si lo que desea es actualizar todos los paquetes que tenga instalados
+(mediante Nix), se usa el mismo comando solo que con la bandera `--all`, es
+decir,
+
+```
+$ nix profile upgrade --all
+```
+
+Buscar paquetes.
+
+En principio, en Nix sin _flakes_ no se pueden buscar paquetes de un modo
+sencillo desde la línea de comandos. Lo mejor es que los busque en [la web
+correspondiente][web-nix-packages].
+
+[web-nix-packages]: https://search.nixos.org/packages
+
+
+
+Mostrar los paquetes instalados (mediante Nix).
+
+```
+$ nix-env -q
+```
+
+
+
+Eliminar paquetes huérfanos.
+
+Por su arquitectura, el _software_ instalado en su sistema mediante Nix
+puede llegar a ocupar mucho. Este se instala bajo el directorio
+_/nix/store_, cosa que recibe el nombre de la _tienda Nix_ (_Nix store_).
+Para eliminar el _software_ que actualmente es innecesario, puede usar el
+comando siguiente:
+
+```
+$ nix-collect-garbage -d
+```
+
+
+
+
+### Con _flakes_
+
+Actualizar paquetes.
+
+Si tiene _flakes_, no es necesario lanzar ningún comando para actualizar
+paquetes, pues TKTK.
+
+
+
+Instalar un paquete.
+
+```
+$ nix profile install nixpkgs#<paquete>
+```
+
+
+Buscar paquetes.
+
+Si usa _flakes_ sí puede buscar paquetes desde la línea de comandos.
+
+```
+$ nix search nixpkgs "<regex>"
+```
+
+Mostrar paquetes instalados
+
+```
+$ nix profile list
+```
+
+
+
+Desinstalar un paquete
+
+```
+$ nix profile remove <paquete>
+```
+
+
+
+

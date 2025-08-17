@@ -1,0 +1,3 @@
+[submodule "ajustes-pandoc"]
+	path = ajustes-pandoc
+	url = git@github.com:ctafur80/ajustes-pandoc.git

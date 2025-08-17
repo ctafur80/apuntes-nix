@@ -1,0 +1,75 @@
+
+
+## Paquetes instalados
+
+```
+age
+bash
+starship
+gnugrep
+gh
+tree-sitter
+ffmpeg-full
+noto-fonts-cjk-sans
+noto-fonts-lgc-plus
+xz
+zstd
+neovim
+typst
+typst-lsp
+typstfmt
+atuin
+stylua
+sqls
+restic
+ripgrep
+go
+zsh-autocomplete
+zsh-completions
+gopls
+yaml-language-server
+nix-zsh-completions
+darwin.cctools
+gnupg
+gnumake
+wget
+macfuse-stubs
+gawk
+p7zip
+ccls
+texlive-combined-full-2023-final
+texlab
+tree-sitter-rst-grammar
+tree
+bash-completion
+nix-bash-completions
+open-pdf-sign
+go-task
+mpv
+jetbrains-mono
+```
+
+Otros que quizás me interesaría instalar:
+
+```
+sqlite
+lua
+# luajit -- Conflicto con lua
+font-jetbrains-mono-nerd-font
+python3
+python3-yt-dlp
+pandoc
+onlyoffice-bin -- quizás
+```
+
+Quizás, la de las fuentes es mejor quitarla de Homebrew y usar simplemente la
+de Nix.
+
+Para entornos de C:
+
+```
+gdb
+valgrind
+```
+
+

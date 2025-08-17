@@ -1,0 +1,55 @@
+[
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/elemento-breadcrumbs.html",
+        "from": "./ajustes-pandoc/salida-web/html/elemento-breadcrumbs.html"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/etiqueta-final-main.html",
+        "from": "./ajustes-pandoc/salida-web/html/etiqueta-final-main.html"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/elemento-nav.html",
+        "from": "./ajustes-pandoc/salida-web/html/elemento-nav.html"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/elemento-boton-nav-bar.html",
+        "from": "./ajustes-pandoc/salida-web/html/elemento-boton-nav-bar.html"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/carga-breadcrumbs.html",
+        "from": "./ajustes-pandoc/salida-web/html/carga-breadcrumbs.html"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/carga-nav-bar.html",
+        "from": "./ajustes-pandoc/salida-web/html/carga-nav-bar.html"
+    },
+    {
+        "type": "LoadedResource",
+        "verbosity": "INFO",
+        "for": "./ajustes-pandoc/salida-web/html/nameref.html",
+        "from": "./ajustes-pandoc/salida-web/html/nameref.html"
+    },
+    {
+        "type": "RunningFilter",
+        "verbosity": "INFO",
+        "path": "citeproc"
+    },
+    {
+        "type": "FilterCompleted",
+        "verbosity": "INFO",
+        "path": "citeproc",
+        "milliseconds": "9"
+    }
+]

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Carlos E. Tafur Egido" />
+  <meta name="dcterms.date" content="2025-02-08" />
+  <meta name="keywords" content="ciencias de la
+computación, informática, tipografía, diseño, documentación, documentación
+técnica" />
+  <meta name="description" content="Documentación sobre Nix." />
+  <title>Documentación sobre Nix</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    q { quotes: "“" "”" "‘" "’"; }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #b3adad; background-color: #1e1e1e; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #e8ba9b; } /* Alert */
+    code span.an { color: #627a62; font-weight: bold; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #a37979; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #a69974; } /* ControlFlow */
+    code span.ch { color: #a37979; } /* Char */
+    code span.cn { color: #a37979; font-weight: bold; } /* Constant */
+    code span.co { color: #627a62; } /* Comment */
+    code span.cv { color: #627a62; font-weight: bold; } /* CommentVar */
+    code span.do { color: #627a62; } /* Documentation */
+    code span.dt { color: #abab96; } /* DataType */
+    code span.dv { color: #99998d; } /* DecVal */
+    code span.er { color: #c3bf9f; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #c0bed1; } /* Float */
+    code span.fu { color: #b3b378; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #627a62; font-weight: bold; } /* Information */
+    code span.kw { color: #a69974; } /* Keyword */
+    code span.op { color: #adad92; } /* Operator */
+    code span.ot { color: #b3b378; } /* Other */
+    code span.pp { color: #e8ba9b; font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #a37979; } /* SpecialChar */
+    code span.ss { color: #a17272; } /* SpecialString */
+    code span.st { color: #a17272; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #a17272; } /* VerbatimString */
+    code span.wa { color: #506350; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/variables.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/variables/manuales-comp-sci.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/base-mobile-first.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/tablas.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/tabla-contenidos.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/codigo.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/matematicas.css" />
+  <link rel="stylesheet" href="./ajustes-pandoc/salida-web/css/desktop.css" />
+  <nav id="nav">
+    <!--<h2></h2>-->
+    <ul id="menu">
+    </ul>
+  </nav>
+
+  <!--<main>-->
+  <input type="checkbox" id="toc-check" />
+  <label id="toc-toggle" for="toc-check">ToC</label>
+  <script src="/Users/ctafur/Documents/disenno-tipografia/ajustes-pandoc/salida-web/javascript/breadcrumbs.js"></script>
+  <script src="/Users/ctafur/Documents/disenno-tipografia/ajustes-pandoc/salida-web/javascript/abre-cierra-nav-bar.js"></script>
+  <script src="/Users/ctafur/Documents/disenno-tipografia/ajustes-pandoc/salida-web/javascript/nameref.js"></script>
+</head>
+<body>
+<div id="breadcrumb"></div>
+<header id="title-block-header">
+<h1 class="title">Documentación sobre Nix</h1>
+<p class="author">Carlos E. Tafur Egido</p>
+<p class="date">02/08/2025</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#introducción" id="toc-introducción">Introducción</a></li>
+<li><a href="#fuentes-de-información"
+id="toc-fuentes-de-información">Fuentes de información</a></li>
+<li><a href="#instalación" id="toc-instalación">Instalación</a>
+<ul>
+<li><a href="#flakes-y-el-comando-nix"
+id="toc-flakes-y-el-comando-nix"><em>Flakes</em> y el comando
+<code>nix</code></a></li>
+</ul></li>
+<li><a href="#uso-como-gestor-de-paquetes"
+id="toc-uso-como-gestor-de-paquetes">Uso como gestor de paquetes</a>
+<ul>
+<li><a href="#sin-flakes" id="toc-sin-flakes">Sin
+<em>flakes</em></a></li>
+<li><a href="#con-flakes" id="toc-con-flakes">Con
+<em>flakes</em></a></li>
+</ul></li>
+<li><a href="#lenguaje-nix" id="toc-lenguaje-nix">Lenguaje Nix</a>
+<ul>
+<li><a href="#tipos-de-datos" id="toc-tipos-de-datos">Tipos de
+datos</a></li>
+<li><a href="#let-bindings" id="toc-let-bindings"><code>let</code>
+<em>bindings</em></a></li>
+<li><a href="#funciones" id="toc-funciones">Funciones</a></li>
+<li><a href="#repl" id="toc-repl">REPL</a></li>
+<li><a href="#derivaciones" id="toc-derivaciones">Derivaciones</a></li>
+<li><a href="#el-sistema-module" id="toc-el-sistema-module">El sistema
+<em>module</em></a></li>
+</ul></li>
+<li><a href="#paquetes-instalados" id="toc-paquetes-instalados">Paquetes
+instalados</a></li>
+</ul>
+</nav>
+<section id="introducción" class="level1">
+<h1>Introducción</h1>
+<p>Nix es una tecnología que ha comenzado a alcanzar popularidad en los
+últimos años debido a que soluciona algunos de los problemas que se
+tenían en el despliegue (<em>deployment</em>) de <em>software</em> y que
+tecnologías modernas como los contenedores OCI (por ejemplo, los de
+Docker), no llegaban a solucionar.</p>
+<p>Nix surgió como una idea que presentó Eelco Dolstra en <a
+href="https://edolstra.github.io/pubs/phd-thesis.pdf">su tesis
+doctoral</a> en la Universidad de Utretch.</p>
+<p>Al igual que los contenedores OCI, Nix soluciona el famoso problema
+de <q>En mi máquina funciona</q>. TKTK.</p>
+<p>En realidad, Nix es varias cosas: 1) un lenguaje específico de
+dominio (<em>domain-specific language</em> o DSL), de paradigma
+funcional puro muy inspirado en Haskell, 2) un gestor de paquetes
+(<em>package manager</em>) como pueden ser Homebrew o APT, y 3) una
+herramienta para la creación y gestión de entornos
+(<em>environments</em>) como alternativa a cosas como los entornos
+<code>venv</code> del ecosistema Python o a los contenedores Docker.</p>
+<p>Como verá, los entornos de Nix tienen propiedades que los hacen mucho
+mejores a estos otros. De hecho, podríamos considerar que el fin de Nix
+es su uso para entornos. Los otros dos no son más que componentes que
+sirven para tal fin.</p>
+<p>Nix puede incluso hacer uso de contenedores OCI, con lo que podríamos
+saltarnos el uso de un gestor de contenedores como Docker. Hay quien
+afirma que el propio Nix es mejor que Docker a este respecto.</p>
+<p>Además de lo mencionado, Nix nos aporta otras cosas. Vamos a hacer un
+resumen de todo lo que nos aporta.</p>
+<ul>
+<li>Reproducibilidad (<em>reproducibility</em>).</li>
+<li>Determinismo (<em>determinism</em>). Mejor que el de los
+contenedores OCI.</li>
+<li>Mayor orden en el sistema de archivos (<em>filesystem</em>).</li>
+<li>Mejor a la hora de desarrollar. Al igual que sucede con los
+contenedores OCI, al hacer uso de un entorno, en el sistema desde el que
+desarrollamos TKTK.</li>
+</ul>
+<p>Nix no es más seguro que lo demás. Pero sí que puede gestionar
+contenedores en entornos Nix, cosa que puede otorgarle mayor
+seguridad.</p>
+<!--
+De hecho, en mi caso particular, al igual que le sucede a muchos otros
+usuarios de Nix, he pasado a instalar menos _software_ para todo el sistema
+(_systemwide_) en favor de crear más frecuentemente entornos para propósitos
+específicos. Por ejemplo, un _software_ que solía instalar de forma global
+en mi sistema de uso personal es `yt-dlp`, que permite la descarga de vídeos
+de sitios web. Ahora, lo que hago es tener un entorno en el que, cuando se
+activa, se tiene de forma local dicha herramienta. Esto es muy propicio para
+herramientas del tipo de `yt-dlp`, que en realidad son más bien bibliotecas
+(_libraries_). TKTK.
+-->
+</section>
+<section id="fuentes-de-información" class="level1">
+<h1>Fuentes de información</h1>
+<p>No es recomendable comenzar por la documentación oficial para
+aprender lo básico sobre Nix, pues creo que es bastante inaccesible y no
+han puesto gran cuidado en la pedagogía. No lo digo solo yo; he
+encontrado a mucha gente que sabe mucho más que yo sobre Nix comentar
+esto mismo.</p>
+<p>Personalmente, me gustó bastante la <a
+href="https://www.youtube.com/watch?v=TsZte_9GfPE">conferencia</a> de un
+empleado de ReplIt. Es fácil de entender. Para adentrarse un poco más en
+el lenguaje Nix y las derivaciones, está muy bien <a
+href="https://www.youtube.com/watch?v=5D3nUU1OVx8">un vídeo</a> de
+Surma, un creador de contenido de ciencias de la computación.</p>
+<p>También, pueden estar bien <a
+href="https://www.youtube.com/watch?v=t8ydCYe9Y3M">este tutorial</a> y
+<a href="https://www.youtube.com/watch?v=5D3nUU1OVx8">este otro</a>.</p>
+<p>Para su uso como sustituto de Homebrew o de APT, no es necesario
+aprender mucho sobre Nix, pero, si desea sacarle el máximo partido,
+deberá comenzar a aprender su lenguaje así como la estructura de Nix en
+su sistema.</p>
+<p>La empresa Determinate Systems tiene también un buen tutorial de Nix,
+titulado <a href="https://zero-to-nix.com/">Zero to Nix</a>.</p>
+</section>
+<section id="instalación" class="level1">
+<h1>Instalación</h1>
+<p>Además de la instalación tradicional de Nix, la que <a
+href="https://nixos.org/download/">se explica en su web</a> oficial,
+ahora existe la posibilidad de instalar una distribución de Nix (<em>Nix
+distribution</em>) llamada Determinate Nix. TKTK. Esta última tiene
+algunas ventajas, como TKTK.</p>
+<p>Lo que se hace en la instalación tradicional es descargar un
+<em>script</em> de <em>shell</em> que se encarga de hacer la
+instalación. En macOS no hay nada que decidir, pero en Linux se puede
+hacer la instalación monousuario o multiusuario. Se recomienda esta
+última. La diferencia está en que en esta se instala como un demonio
+(<em>daemon</em>); por tanto, como un <em>software</em> de tipo
+cliente-servidor.</p>
+<p>Tal y como hemos dicho, existe también la posibilidad de instalar una
+distribución de Nix. La más popular es <a
+href="https://docs.determinate.systems/determinate-nix/">Determinate
+Nix</a>, creada por la empresa <a
+href="https://zero-to-nix.com/">Determinate Systems</a>, en la que
+actualmente trabaja el propio Dolstra, el creador de Nix.</p>
+<p>Entre las ventajas que tiene están que es más cómoda de gestionar
+distribución de Nix (Nix <em>distribution</em>) que es algo más cómoda
+de instalar y de gestionar que por el método tradicional. Además, con
+Determinate Nix se evitan los problemas que aparecen al instalar Nix en
+un sistema Linux que cuente con SELinux activado.</p>
+<p>Ahora, habría que explicar qué son los Flakes.</p>
+<p>El principal problema que le encuentro es que de serie hace que se
+usen <em>flakes</em> para todo, lo que conlleva que tenga que tener
+necesariamente conexión a Internet. TKTK. Existe, sin embargo, una forma
+de evitarlo TKTK. Quizás, para comenzar sea mejor hacerlo sin
+<em>flakes</em>, para que no tenga que aprender tantas cosas de
+golpe.</p>
+<p>Para hacer la instalación mediante la distribución de Determinate
+Systems, solo hay que seguir las explicaciones del repositorio <a
+href="https://github.com/DeterminateSystems/nix-installer"><code>nix-installer</code></a></p>
+<p>Esto activa el uso del comando <code>nix</code> y cambia también los
+repositorios. En cuanto a los <em>flakes</em>, se suele usar con estos.
+TKTK.</p>
+<section id="flakes-y-el-comando-nix" class="level2">
+<h2><em>Flakes</em> y el comando <code>nix</code></h2>
+<p>Nix incorporó una funcionalidad llamada <em>flakes</em> que supone un
+gran salto en la forma de funcionar de este. Con <em>flakes</em> tenemos
+a un Nix más determinista y lleva un paso más allá la filosofía de
+Nix.</p>
+<p>Por ejemplo, si no usa <em>flakes</em> los paquetes que tenga serán
+de la versión que indique o TKTK.</p>
+<p>El inconveniente de usar <em>flakes</em> es que para su uso requiere
+de añadir una capa más de conocimiento. Por tanto, lo más recomendable
+es que, antes de pasarse a usar Nix mediante la interfaz
+<em>flakes</em>, aprenda a usar Nix del modo tradicional.</p>
+<p>Para actualizar los paquetes, el comando que debe usar es</p>
+<pre><code>$ nix-channel --update</code></pre>
+<p>El inconveniente de usar <em>flakes</em> es que para su uso requiere
+de añadir una capa más de conocimiento. Por tanto, lo más recomendable
+es que, antes de pasarse a usar Nix mediante la interfaz
+<em>flakes</em>, aprenda a usar Nix del modo tradicional.</p>
+<p>El uso de <em>flakes</em> suele venir asociado a lo que se suele
+llamar <q>el comando <code>nix</code></q>, que no es más que una
+modernización de los comandos de Nix. En la forma antigua, se suelen
+usar comandos de la forma <code>nix-&lt;algo&gt;</code>, mientras que,
+en la nueva (haciendo uso del comando <code>nix</code>), se usa un solo
+comando, <code>nix</code>, junto con subcomandos. Por ejemplo,</p>
+<pre><code>$ nix profile list</code></pre>
+<p>que listaría los paquetes instalados mediante Nix.</p>
+<p>Si ha instalado Nix mediante la distribución de Determinate Systems,
+tendrá habilitados tanto los <em>flakes</em> como el comando
+<code>nix</code>; no tendrá que hacer nada a este respecto. Sin embargo,
+si ha hecho la instalación tradicional, deberá especificarlo con la
+línea siguiente en el archivo de configuración de Nix:</p>
+<pre><code>experimental-features = nix-command flakes</code></pre>
+<p>Dicho archivo puede encontrarse en diversos sitios, según el sistema
+operativo y el tipo de instalación (de Nix): de un solo usuario o de
+todo el sistema (<em>systemwide</em>). En el primer caso, podría estar
+en <em>~/.config/nix/nix.conf</em>, mientras que, en el segundo, en
+<em>/etc/nix/nix.conf</em>. (Recuerde que la recomendada es la
+instalación para todo el sistema.)</p>
+<p>También, suelo especificar que se cree en el sistema el grupo de Nix,
+llamado <code>nixbld</code>:</p>
+<pre><code>build-users-group = nixbld</code></pre>
+<p>Deberá añadir también a su usuario a ese grupo:</p>
+<pre><code># usermod -aG nixbld &lt;usuario&gt;</code></pre>
+<p>Por supuesto, estamos hablando de sistemas de tipo Unix, como, por
+ejemplo, Linux y macOS. En Windows, para instalar Nix deberá hacer uso
+de WSL2.</p>
+</section>
+</section>
+<section id="uso-como-gestor-de-paquetes" class="level1">
+<h1>Uso como gestor de paquetes</h1>
+<p>Antes de pasar a hablar de entornos y del lenguaje Nix, veamos su uso
+como un simple gestor de paquetes, es decir, como alternativa a cosas
+como Homebrew o APT.</p>
+<section id="sin-flakes" class="level2">
+<h2>Sin <em>flakes</em></h2>
+<p>Instalar un paquete.</p>
+<p>Para instalar un paquete, se usa el comando</p>
+<pre><code>$ nix-env -iA nixpkgs.&lt;paquete&gt;</code></pre>
+<p>pero antes de esto deberá actualizar la base de datos con el
+<em>software</em> en TKTK:</p>
+<pre><code>$ nix-channel --update</code></pre>
+<p>Eliminar un paquete.</p>
+<pre><code>$ nix-env --uninstall &lt;paquete&gt;</code></pre>
+<p>Actualizar un paquete.</p>
+<pre><code>$ nix-env --upgrade &lt;paquete&gt;</code></pre>
+<p>Si lo que desea es actualizar todos los paquetes que tenga instalados
+(mediante Nix), se usa el mismo comando solo que con la bandera
+<code>--all</code>, es decir,</p>
+<pre><code>$ nix profile upgrade --all</code></pre>
+<p>Buscar paquetes.</p>
+<p>En principio, en Nix sin <em>flakes</em> no se pueden buscar paquetes
+de un modo sencillo desde la línea de comandos. Lo mejor es que los
+busque en <a href="https://search.nixos.org/packages">la web
+correspondiente</a>.</p>
+<p>Mostrar los paquetes instalados (mediante Nix).</p>
+<pre><code>$ nix-env -q</code></pre>
+<p>Eliminar paquetes huérfanos.</p>
+<p>Por su arquitectura, el <em>software</em> instalado en su sistema
+mediante Nix puede llegar a ocupar mucho. Este se instala bajo el
+directorio <em>/nix/store</em>, cosa que recibe el nombre de la
+<em>tienda Nix</em> (<em>Nix store</em>). Para eliminar el
+<em>software</em> que actualmente es innecesario, puede usar el comando
+siguiente:</p>
+<pre><code>$ nix-collect-garbage -d</code></pre>
+</section>
+<section id="con-flakes" class="level2">
+<h2>Con <em>flakes</em></h2>
+<p>Actualizar paquetes.</p>
+<p>Si tiene <em>flakes</em>, no es necesario lanzar ningún comando para
+actualizar paquetes, pues TKTK.</p>
+<p>Instalar un paquete.</p>
+<pre><code>$ nix profile install nixpkgs#&lt;paquete&gt;</code></pre>
+<p>Buscar paquetes.</p>
+<p>Si usa <em>flakes</em> sí puede buscar paquetes desde la línea de
+comandos.</p>
+<pre><code>$ nix search nixpkgs &quot;&lt;regex&gt;&quot;</code></pre>
+<p>Mostrar paquetes instalados</p>
+<pre><code>$ nix profile list</code></pre>
+<p>Desinstalar un paquete</p>
+<pre><code>$ nix profile remove &lt;paquete&gt;</code></pre>
+</section>
+</section>
+<section id="lenguaje-nix" class="level1">
+<h1>Lenguaje Nix</h1>
+<p>El uso de Nix como gestor de paquetes no ha sido nunca el propósito
+principal de sus creadores. Para sacar el máximo provecho de Nix debe
+aprender a crear y gestionar entornos con este. Para esto, debe aprender
+lo básico del propio lenguaje Nix.</p>
+<p>Aunque aquí vamos a seguir el videotutorial titulado Nix From Nothing
+#1, que está bien para una primera aproximación, los conceptos del
+lenguaje Nix vienen mejor explicados en otros tutoriales como <a
+href="https://nix.dev/tutorials/nix-language">el de Nix.dev</a>. Además,
+se tiene como referencia <a
+href="https://nixos.org/manual/nix/stable/language/">lo que explican</a>
+en el manual oficial, que le dará un conocimiento más completo.</p>
+<p>Otra muy buena explicación del lenguaje Nix es <a
+href="https://www.youtube.com/watch?v=5D3nUU1OVx8">esta</a>.</p>
+<section id="tipos-de-datos" class="level2">
+<h2>Tipos de datos</h2>
+<p>La estructura de datos principal de Nix es la que se conoce como
+<em>conjunto de atributos</em> (<em>attributes set</em>), que sería en
+cierto modo parecido a los diccionarios de Python (tiene muchos nombres;
+además de estos, tabla <em>hash</em>, arreglo asociativo, mapas, etc.).
+Tiene una sintaxis muy parecida a la del formato JSON.</p>
+<p>También, hay que tener en cuenta que, ya que se adhiere bastante al
+paradigma funcional, en Nix lo que se maneja son expresiones
+(<em>expressions</em>); no afirmaciones (<em>statements</em>). Esto
+permite al lenguaje prescindir del signo de punto y coma
+(<code>;</code>, <em>semicolon</em>) al final. En cualquier caso, por
+razones de expresividad, se ha dado otro uso a dicho símbolo;
+concretamente, se usa para separar los distintos elementos dentro de un
+conjunto de atributos.</p>
+<p>Lo siguiente sería un literal de un conjunto de atributos. Por
+ejemplo,</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">name1</span> <span class="op">=</span> <span class="st">&quot;value1&quot;</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">name2</span> <span class="op">=</span> <span class="st">&quot;value2&quot;</span><span class="op">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Tal y como hemos dicho, sería equivalente a un diccionario.</p>
+<p>Si en su instalación de Nix tiene activado <em>flakes</em>, si
+introduce lo anterior en un archivo como, por ejemplo,
+<em>example.nix</em>, podemos evaluar ese conjunto de atributos con el
+comando siguiente:</p>
+<pre><code>$ nix eval --file example.nix
+{ name1 = &quot;value1&quot;; name2 = &quot;value2&quot;; }</code></pre>
+<p>El uso del punto y coma en los elementos de un conjunto de atributos
+es obligatorio, incluso en el último de estos (de los elementos).</p>
+<p>Otro tipo de dato estructurado que se tiene son las listas
+(<em>lists</em>). Serían lo mismo que las listas en Python (mutabilidad?
+mejor, las tuplas?). TKTK. Un literal de lista sería, por ejemplo,</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span></code></pre></div>
+<p>El espacio o nuevo renglón es el que sirve para delimitar los
+elementos en la lista. La anterior sería igual a la siguiente:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="op">]</span></span></code></pre></div>
+<p>Aunque se suele usar como regla de estilo dejar un espacio entre los
+delimitadores y los elementos en su interior, este lo podríamos eliminar
+si lo deseáramos:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span><span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span><span class="op">]</span></span></code></pre></div>
+</section>
+<section id="let-bindings" class="level2">
+<h2><code>let</code> <em>bindings</em></h2>
+<p>Aunque se tenga una expresión declarativa, se pueden especificar
+valores de variables en esta, tal y como se hace, por ejemplo, en las
+<em>list comprehensions</em> de Python. En Nix sucede algo similar. Para
+esto se usan los <code>let</code> <em>bindings</em>. Por ejemplo,</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">myNumber</span> <span class="op">=</span> <span class="dv">42</span><span class="op">;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    myNumber <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
+<p>Ojo con el punto y coma antes del <code>in</code>. Al ser un conjunto
+de atributos lo que introducimos dentro de <code>let</code>, debrá tener
+punto y coma cada uno de los elementos ahí. Lo que hay tras
+<code>in</code> es una expresión que hace uso de ese conjunto de
+atributos.</p>
+<pre><code>$ nix eval --file 01.nix
+43</code></pre>
+<p>Como ve, sigue siendo una expresión pero esta vez esta tiene en
+cuenta el valor de la variable <code>myNumber</code>.</p>
+<p>Lo considero en realidad una expresión porque lo importante es lo que
+va tras la palabra clave <code>in</code>. Lo que va entre
+<code>let</code> e <code>in</code> es simplemente para hacer a la
+expresión consciente de los valores de ciertas variables. En cualquier
+caso, ya no estamos en un paradigma funcional puro; bueno, eso depende
+de cómo se considere TKTK.</p>
+<p>En cualquier caso, esas variables están confinadas a esa expresión,
+es decir, no tenemos variables globales y, por tanto, no se puede
+afirmar que el programa ejecutándose pase por estados diversos.</p>
+</section>
+<section id="funciones" class="level2">
+<h2>Funciones</h2>
+<p>Nix cuenta también, evidentemente, con funciones. Por ejemplo, así se
+definiría y se invocaría una función que decidimos llamar
+<code>greet()</code>.</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">greet</span> <span class="op">=</span> <span class="va">name</span><span class="op">:</span> <span class="st">&quot;Hello, </span><span class="sc">${</span>name<span class="sc">}</span><span class="st">!&quot;</span><span class="op">;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    greet <span class="st">&quot;Carlos&quot;</span></span></code></pre></div>
+<p>Como ve, la función se define asignando una definición de función
+anónima (<em>anonymous function</em>; a estas también las suelen llamar
+<em>funciones lambda</em>, <em>lambda functions</em>) a una variable (en
+este caso, <code>greet</code>), y esto se hace dentro de la parte
+<code>let</code> de un <code>let</code> <em>binding</em>.</p>
+<p>En la definición de la función, lo primero que se pone son los
+parámetros (o parámetros formales). A la derecha de estos, un signo de
+dos puntos (<code>:</code>, <em>colon</em>), y a su derecha, la propia
+definición de la función; o su firma (<em>signature</em>), se podría
+decir también.</p>
+<p>En la parte <code>in</code>, se puede invocar la función, con los
+argumentos (o parámetros reales) que deseemos. En este caso, el
+argumento es el literal de cadena <code>Carlos</code>. Las comillas
+sirven para delimitar al literal de cadena y, en este caso, no forman
+parte del mismo; al igual que suele suceder con la mayoría de lenguajes
+de programación.</p>
+<p>La sintaxis suele evitar el uso de signos de llaves
+(<code>{ }</code>) y paréntesis (<code>()</code>). También, como ve, se
+hace interpolación de cadena (<em>string interpolation</em>, o plantilla
+de cadena, <em>template string</em>) en los literales de cadena, al
+igual que en tantos otros lenguajes. En este caso, tiene la forma
+<code>${&lt;var&gt;}</code> donde <code>&lt;var&gt;</code> será la
+variable de la que se tomará el valor para insertar en esa parte de la
+cadena.</p>
+<p>Al evaluar la expresión <code>let-in</code> anterior, dará como
+resultado</p>
+<pre><code>$ Hello, Carlos!</code></pre>
+<p>como es evidente.</p>
+<p>Si deseamos una función que tenga más de un parámetro de entrada, se
+puede usa lo que en programación funcional llaman el <em>currying</em>,
+es decir, hacer uso de una función dentro de otra.</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">greet</span> <span class="op">=</span> <span class="va">greeting</span><span class="op">:</span> <span class="va">name</span><span class="op">:</span> <span class="st">&quot;</span><span class="sc">${</span>greeting<span class="sc">}</span><span class="st">, </span><span class="sc">${</span>name<span class="sc">}</span><span class="st">!&quot;</span><span class="op">;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    greet <span class="st">&quot;Howdy&quot;</span> <span class="st">&quot;Carlos&quot;</span></span></code></pre></div>
+<p>que devolverá</p>
+<pre><code>$ Howdy, Carlos!</code></pre>
+<p>Como ve, cuando se dan varios argumentos a una llamada de una
+función, estos se separan mediante espacio.</p>
+<p>Ahora, vamos a mezclar las funciones con conjuntos de atributos.</p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="va">secret</span><span class="op">:</span> <span class="op">{</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">mySuperSecretValue</span> <span class="op">=</span> secret<span class="op">;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="st">&quot;abcd&quot;</span></span></code></pre></div>
+<p>que daría</p>
+<pre><code>$ nix eval --file example.nix
+{ mySuperSecretValue = &quot;abcd&quot;; }</code></pre>
+<p>En este caso, la definición de la función es básicamente un conjunto
+de atributos, como puede ver. Por tanto, lo que devuelve la función será
+eso mismo.</p>
+<p>Por cierto, de momento, como verá, estamos haciendo uso de argumentos
+posicionales en las funciones. Ahora, vamos a ver cómo se haría uso de
+argumentos nombrados.</p>
+<p>También, se le podría pasar un conjunto de atributos como argumento a
+la función.</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="va">secret</span><span class="op">:</span> <span class="op">{</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">mySuperSecretValue</span> <span class="op">=</span> secret<span class="op">;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que daría</p>
+<pre><code>$ nix eval --file example.nix
+{ mySuperSecretValue = { key = &quot;my_secret&quot;; value = &quot;super-secret&quot;; }; }</code></pre>
+<p>Ojo con el punto y coma tras <code>"super-secret"</code>. En
+realidad, aquí no hemos hecho nada, es decir, este ejemplo no tiene
+ningún sentido.</p>
+<p>Pero quizás no era eso lo que deseábamos hacer, sino lo
+siguiente:</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">mySuperSecretValue</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+{ mySuperSecretValue = &quot;super-secret&quot;; }</code></pre>
+<p>Como ve, solo muestra el atributo al que se le da hado un valor. El
+otro, al no haber recibido ningún valor, no lo muestra, pues, en la
+definición de la función, no se da ningún uso al parámetro
+<code>key</code>.</p>
+<p>¿Pero cómo podríamos modificar esta función para que sí que haga uso
+del parámetro <code>key</code> en la clave del conjunto de atributos? Es
+muy sencillo; no hay más que usar la interpolación de cadena:</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="sc">${</span>key<span class="sc">}</span><span class="st">&quot;</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+{ my_secret = &quot;super-secret&quot;; }</code></pre>
+<p>Podríamos haber puesto la clave sin comillas y también sería
+válido.</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>        <span class="sc">${</span>key<span class="sc">}</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="va">in</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> { <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+{ my_secret = &quot;super-secret&quot;; }</code></pre>
+<p>Si en la definición de la función solo se hubiera especificado el
+parámetro <code>value</code> y, luego, en la llamada, se ponen ambos,
+nos dará un error.</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">mySuperSecretValue</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que daría</p>
+<pre><code>❯ nix eval --file example.nix
+error: &#39;makeSecret&#39; at /Users/ctafur/temp/nix/nix-from-nothing-tuto/dos/example.nix:2:18 called with unexpected argument &#39;key&#39;
+
+       at /Users/ctafur/temp/nix/nix-from-nothing-tuto/dos/example.nix:6:5:
+
+            5| in
+            6|     makeSecret { key = &quot;my_secret&quot;; value = &quot;super-secret&quot;; }
+             |     ^
+            7|
+(use &#39;--show-trace&#39; to show detailed location information)</code></pre>
+<p>Si deseamos dejar abierta la posibilidad de que se pueda llamar a
+otros argumentos no especificados en la definición de una función, se
+puede usar la notación de elipsis (<em>ellipsis</em>): <code>...</code>,
+para indicarlo.</p>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">value</span><span class="op">,</span> <span class="op">...</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">mySuperSecretValue</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+{ mySuperSecretValue = &quot;super-secret&quot;; }</code></pre>
+<p>Es decir, tampoco hace uso del parámetro <code>key</code>, pero esta
+vez no da error.</p>
+<p>Advierta que, en el literal de conjunto de atributos que se usa en la
+definición de la función, las variables en las claves, para ser
+sustituidas por su valor, deben usar la notación de interpolación de
+cadena, mientras que con los valores no sucede esto. Es decir, lo
+siguiente</p>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">key</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>daría</p>
+<pre><code>$ nix eval --file example.nix
+{ key = &quot;super-secret&quot;; }</code></pre>
+<p>que no es lo que deseábamos en este caso.</p>
+<p>También, se podría hacer más dinámico:</p>
+<div class="sourceCode" id="cb44"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;user-key:</span><span class="sc">${</span>key<span class="sc">}</span><span class="st">&quot;</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+{ &quot;user-key:my_secret&quot; = &quot;super-secret&quot;; }</code></pre>
+<p>Si queremos hacer lo siguiente:</p>
+<div class="sourceCode" id="cb46"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">value</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>se puede hacer de forma abreviada usando el enunciado
+<code>inherit</code>:</p>
+<div class="sourceCode" id="cb47"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">makeSecret</span> <span class="op">=</span> <span class="op">{</span> <span class="va">key</span><span class="op">,</span> <span class="va">value</span> <span class="op">}</span>: <span class="op">{</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">inherit</span> <span class="va">value</span><span class="op">;</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    makeSecret <span class="op">{</span> <span class="va">key</span> <span class="op">=</span> <span class="st">&quot;my_secret&quot;</span><span class="op">;</span> <span class="va">value</span> <span class="op">=</span> <span class="st">&quot;super-secret&quot;</span><span class="op">;</span> <span class="op">}</span></span></code></pre></div>
+<p>En ambos casos, se tendría como resultado</p>
+<pre><code>$ nix eval --file example.nix
+{ value = &quot;super-secret&quot;; }</code></pre>
+<p>Imagino que el uso que se da a <code>inherit</code> será para hacer
+pruebas sobre los estados de las variables, al igual que en Python se
+hace con <code>f"variable="</code>.</p>
+<p>También, se puede tener una función dentro de un conjunto de
+atributos. La forma de acceder a este es mediante la notación punto.</p>
+<div class="sourceCode" id="cb49"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">conj_atrib</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">greet</span> <span class="op">=</span> <span class="va">greeting</span><span class="op">:</span> <span class="va">name</span><span class="op">:</span> <span class="st">&quot;</span><span class="sc">${</span>greeting<span class="sc">}</span><span class="st">, </span><span class="sc">${</span>name<span class="sc">}</span><span class="st">!&quot;</span><span class="op">;</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    conj_atrib<span class="op">.</span>greet <span class="st">&quot;Howdy&quot;</span> <span class="st">&quot;Carlos&quot;</span></span></code></pre></div>
+<p>TKTK.</p>
+<p>También, debe saber que los comentarios son el símbolo <code>#</code>
+para comentar hasta final de línea, y, <code>/*</code> y
+<code>*/</code>, para abrir y cerrar, respectivamente, un comentario
+multilínea.</p>
+<!-- --------------------------------------------------------------- -->
+<p>Llegados a este punto, básicamente hemos visto lo básico del lenguaje
+Nix. Lo natural sería que el paso siguiente consistiera en integrar este
+conocimiento con Nixpkgs, que son los paquetes junto con una serie de
+fuciones. TKTK. Entre las cosas que haremos con Nixpkgs se encuentran
+crear <em>helper functions</em> para mapas (<em>maps</em>), para filtros
+(<em>filters</em>), etc.</p>
+<p>Vamos a ver primero cómo se importan otros archivos de Nix.</p>
+<p>Creamos el archivo <em>other-file.nix</em> con el contenido
+siguiente:</p>
+<div class="sourceCode" id="cb50"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">greet</span> <span class="op">=</span> <span class="va">name</span><span class="op">:</span> <span class="st">&quot;Hello, </span><span class="sc">${</span>name<span class="sc">}</span><span class="st">!&quot;</span><span class="op">;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Como ve, lo único que contiene es un conjunto de atributos cuyo único
+elemento tiene por clave la cadena <code>"greet"</code> y, por valor,
+una función anónima.</p>
+<p>Ahora, vamos a crear otro archivo Nix, que llamaremos
+<em>example.nix</em>, desde el que cargaremos el anterior archivo Nix,
+<em>other-file.nix</em>. En <em>example.nix</em>, incluiremos lo
+siguiente:</p>
+<div class="sourceCode" id="cb51"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">myLibrary</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./other-file.nix</span><span class="op">;</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    myLibrary</span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+{ greet = &lt;LAMBDA&gt;; }</code></pre>
+<p>En <em>example.nix</em> se la incluido, dentro de un <code>let</code>
+<em>binding</em>, una importación del contenido de otro archivo Nix;
+concretamente, de <em>other-file.nix</em>. El resultado de evaluar
+<em>example.nix</em> es el esperado. En la información que nos da la
+evaluación, la parte <code>&lt;LAMBDA&gt;</code> indica una función
+anónima, pero sin especificar el contenido de esta. En cualquier caso,
+la forma de invocarla es usar la clave asociada a la misma en la tabla,
+es decir, <code>greet</code>. Pero ese atributo está dentro del conjunto
+de atributos <code>myLibrary</code>, por lo que deberá llamar al
+<code>greet</code> de <code>myLibrary</code>, cosa que puede hacer
+usando el operador punto, tal y como se explicó antes.</p>
+<div class="sourceCode" id="cb53"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">myLibrary</span> <span class="op">=</span> <span class="bu">import</span> <span class="ss">./other-file.nix</span><span class="op">;</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    myLibrary<span class="op">.</span>greet <span class="st">&quot;Carlos&quot;</span></span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+&quot;Hello, Carlos!&quot;</code></pre>
+<p>Esto mismo se puede hacer con los paquetes Nix.</p>
+<div class="sourceCode" id="cb55"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> &lt;nixpkgs&gt;<span class="op">;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    pkgs</span></code></pre></div>
+<p>que da</p>
+<pre><code>$ nix eval --file example.nix
+&lt;LAMBDA&gt;</code></pre>
+<p>Como es una función (ya que pone <code>&lt;LAMBDA&gt;</code>, se
+debería especificar algún parámetro, o varios de estos en un conjunto de
+atributos. En realidad, <code>&lt;nixpkgs&gt;</code> es una función que
+a su vez contiene muchas cosas a distintos niveles de anidamiento:
+funciones y conjuntos de atributos, principalmente.</p>
+<div class="sourceCode" id="cb57"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> &lt;nixpkgs&gt; <span class="op">{};</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>lib</span></code></pre></div>
+<p>Esto nos mostrará todo lo que hay en el atributo <code>lib</code>
+dentro de la lista de paquetes (<code>nixpkgs</code>). La salida es
+bastante grande. Tenga cuidado de no intentar llamar a
+<code>pkgs</code>, que llamaría a todos los paquetes. Lo hice, al seguir
+este tutorial, y tuve que terminar reiniciando el computador, ya que son
+muchos los paquetes incluidos actualmente.</p>
+<p>Con <code>&lt;nixpkgs&gt;</code>, lo que hemos hecho es usar esa
+biblioteca tomada de nuestro entorno, es decir, de la de nuestra
+instalación de Nix. Se podría haber optado, alternativamente, a tomarla
+de su repositorio en GitHub, por ejemplo, o de algún otro sitio,
+especificando la URL que correspondiera.</p>
+<p>Con el comando siguiente, se puede consultar de dónde lo toma su
+instalación local:</p>
+<pre><code>$ nix-channel --list
+nixpkgs https://nixos.org/channels/nixpkgs-unstable</code></pre>
+</section>
+<section id="repl" class="level2">
+<h2>REPL</h2>
+<p>Una forma bastante cómoda de hacer pruebas con la biblioteca
+<code>nixpkgs</code> es desde el REPL de Nix. Si tiene activado
+<em>flakes</em>, se entra con</p>
+<pre><code>$ nix repl
+nix-repl&gt;</code></pre>
+<p>Una diferencia con el lenguaje en los archivos es que en el REPL no
+tiene que terminar con punto y coma. También, se pueden asignar valores
+a variables sin usar <code>let</code>-<code>in</code>.</p>
+<p>Tiene autocompletado, por lo que puede ir viendo los elementos de las
+distintas bibliotecas.</p>
+<pre><code>nix-repl&gt; pkgs = import &lt;nixpkgs&gt; {}
+nix-repl&gt; pkgs.lib.</code></pre>
+<p>Si ahí, sin pulsar <kbd>Intro</kbd>, pulsa <kbd>Tab</kbd> para hacer
+<em>tab-completion</em>, se mostrará todo lo que hay bajo el conjunto de
+atributos <code>lib</code> de <code>nixpkgs</code>.</p>
+<p>Además de los distintos elementos de <code>nixpkgs</code>, nuestra
+instalación trae siempre ciertos elementos de serie. A esto los llaman
+<em>builtins</em>. Puede consultarlos también:</p>
+<pre><code>nix-repl&gt; builtins.</code></pre>
+<p>y pulse <kbd>Tab</kbd>. Por ejemplo, tenemos la función
+<code>derivation</code> dentro de <code>builtins</code>, a la que podemo
+hacer alusión con <code>builtins.derivation</code>.</p>
+<pre><code>nix-repl&gt; builtins.derivation
+«lambda @ /builtin/derivation.nix:5:1»</code></pre>
+<p>Como vemos, es una función, ya que pone <code>lambda</code>. Esta
+función tiene varios argumentos obligatorios. Si tratamos de invocarla
+sin esos argumentos,</p>
+<div class="sourceCode" id="cb63"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="bu">builtins</span><span class="op">.</span>derivation <span class="op">{}</span></span></code></pre></div>
+<p>nos dará un error.</p>
+<pre><code>$ nix eval --file example.nix
+error:
+       … while evaluating the attribute &#39;outPath&#39;
+
+         at /builtin/derivation.nix:19:9: (source not available)
+
+       … while calling the &#39;getAttr&#39; builtin
+
+         at /builtin/derivation.nix:19:19: (source not available)
+
+       (stack trace truncated; use &#39;--show-trace&#39; to show the full trace)
+
+       error: attribute &#39;name&#39; missing</code></pre>
+<p>Vamos a ver los argumentos:</p>
+<div class="sourceCode" id="cb65"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="bu">builtins</span><span class="op">.</span>derivation <span class="op">{</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">name</span> <span class="op">=</span> <span class="st">&quot;my-derivation&quot;</span><span class="op">;</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</section>
+<section id="derivaciones" class="level2">
+<h2>Derivaciones</h2>
+<p>Las <em>derivaciones</em> (<em>derivations</em>) son las unidades
+fundamentales para la construcción (<em>building</em>) y empaquetamiento
+(<em>packaging</em>) del <em>software</em>. Una derivación es una
+especificación de un proceso de construcción; no la salida de la
+construcción. Describe todo lo que se necesita para crear un paquete,
+asegurándose de que las construcciones son reproducibles y aisladas.</p>
+<!-- El lenguaje Nix se creó con el propósito de escribir derivaciones -->
+<p>¿Qué hay dentro de una derivación? Una derivación es básicamente una
+<q>receta</q> escrita en el lenguaje Nix. Es un conjunto de atributos
+—la estructura de datos básica de Nix, que no es más que una colección
+de pares clave-valor— que contiene toda la información necesaria para
+que el gestor de paquetes Nix construya un paquete de <em>software</em>.
+Entre las claves de los atributos se encuentran las siguientes:</p>
+<ul>
+<li><code>builder</code>: El programa que realiza la construcción. A
+menudo se trata de un <em>script</em> de <em>shell</em>.</li>
+<li><code>args</code>: Lista con los argumentos que se pasan al comando
+de <code>builder</code>.</li>
+<li><code>name</code>: Un nombre único para el paquete resultante; por
+ejemplo, <code>hello-2.12.1</code>.</li>
+<li><code>src</code>: El código fuente (<em>source code</em>) para
+construir. A menudo se obtiene (<em>fetch</em>) de una URL o una ruta
+local (<em>local path</em>).</li>
+<li><code>system</code>: La arquitectura para la que se está
+construyendo el paquete; por ejemplo, <code>x86_64-linux</code>.</li>
+<li><code>buildInputs</code>: Una lista de otras derivaciones
+(dependencias) que son requeridas para construir el paquete.</li>
+<li><code>propagatedBuildInputs</code>: Dependencias que se requieren no
+solo para construir el paquete sino también para ejecutarlo.</li>
+</ul>
+<p>Cuando se le pide a Nix que construya un paquete (por ejemplo,
+mediante el uso del comando <code>nix-build</code>), este busca el
+archivo de la derivación para dicho paquete. Este archivo contiene el
+<em>blueprint</em> completo para la construcción. Entonces Nix</p>
+<ul>
+<li><p>Resuelve las dependencias. Comprueba primero si todas las
+<code>buildInputs</code> y otras dependencias se encuentran ya
+construidas en la tienda Nix (<em>Nix store</em>). Si no es así, las
+construye primero.</p></li>
+<li><p>Crea un entorno aislado (<em>sandboxed environment</em>). Nix
+crea un entorno hermético para el proceso de construcción. Este
+<em>sandbox</em> se asegura de que el <em>build</em> solo puede acceder
+al código y las dependencias especificadas. No puede ver o user nada más
+del sistema, como bibliotecas o herramientas instaladas fuera de la
+tienda Nix.</p></li>
+<li><p>Ejecuta el <em>builder</em>. Nix ejecuta el <em>script</em> de
+construcción con los argumentos especificados dentro del
+<em>sandbox</em>. Este <em>script</em> normalmente realiza los pasos que
+tradicionalmente se usan para compilar código fuente en sistemas de tipo
+Unix, es decir, <code>configure</code>, <code>make</code> y
+<code>make install</code>.</p></li>
+<li><p>Almacena la salida. El paquete una vez construido es almacenado
+en la tienda Nix, un directorio especial, normalmente con la ruta
+<em>/nix/store</em>. Cada paquete tiene una ruta única y accesible por
+el contenido; por ejemplo,
+<em>/nix/store/1y9b6348hgzb…-hello-2.12.1</em>.La primera parte del
+nombre del archivo es un <em>hash</em> de todos sus <em>inputs</em> y de
+la receta de construcción.</p></li>
+</ul>
+<hr />
+<p>Dentro de los elementos que vienen de serie en nuestra instalación de
+Nix, que se encuentran en el conjunto de atributos
+<code>builtins</code>, se tiene la función <code>derivation</code>.
+Sabemos que se trata de una función porque, si la invocamos desde el
+REPL, muestra lo siguiente:</p>
+<pre><code>nix-repl&gt; builtins.derivation
+«lambda @ /builtin/derivation.nix:5:1»</code></pre>
+<p>Como ve, nos referimos a esta empleando la notación punto:
+<code>builtins.derivation</code>. Aun así, esta no se puede invocar sin
+especificar los valores para ciertos parámetros.</p>
+<div class="sourceCode" id="cb67"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="bu">builtins</span><span class="op">.</span>derivation <span class="op">{</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">name</span> <span class="op">=</span> <span class="st">&quot;my-derivation&quot;</span><span class="op">;</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">system</span> <span class="op">=</span> <span class="st">&quot;x86_64-darwin&quot;</span><span class="op">;</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">builder</span> <span class="op">=</span> <span class="st">&quot;/bin/sh&quot;</span><span class="op">;</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">args</span> <span class="op">=</span> <span class="op">[</span> <span class="st">&quot;-c&quot;</span> <span class="st">&quot;echo Hello &gt; $out&quot;</span> <span class="op">];</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Estos parámetros son <code>name</code>, que es el nombre que queramos
+que tenga esta. También, <code>system</code>, donde se debe especificar
+el nombre del sistema sobre el que se podrá ejecutar. Se podría
+consultar en el REPL del modo siguiente:</p>
+<pre><code>nix-repl&gt; builtins.attrNames pkgs.lib.platforms</code></pre>
+<p>Puede ser, por ejemplo, para Linux en arquitectura x86 de 64 bits,
+<code>x86_64-linux</code>.</p>
+<p>También es obligatorio el parámetro <code>builder</code>, que es el
+programa del que se va a crear la derivación. Como parámetro opcional,
+complementando al <em>software</em> que se incluya en
+<code>builder</code>, se tiene el parámetro <code>args</code>, que
+especifica una lista con los argumentos que deseamos que tenga dicho
+comando.</p>
+<p>En este ejemplo, se ha especificado que se construya el
+<em>software</em> que se encuentra en el archivo <em>/bin/sh</em>.
+Además, que se le pasen como argumentos <code>-c</code> y
+<code>echo Hello &gt; $out</code>, cosa que quiere decir que se muestre
+en la salida estándar de ese <em>shell</em> (_/bin/<em>sh</em>) la
+cadena <code>Hello</code>. Advierta que <code>$out</code> tiene un
+significado especial en Nix. Indica la variable de salida, es decir, a
+dónde irá la salida del programa TKTK.</p>
+<p>Una vez construida la espeficicación de la derivación, puede
+evaluarla, aunque no es un paso necesario. Se hace con</p>
+<pre><code>$ nix eval --file ./example.nix
+{ all = [ «repeated» ]; args = [ &quot;-c&quot; &quot;echo Hello &gt; $out&quot; ]; builder = &quot;/bin/sh&quot;; drvAttrs = { args = «repeated»; builder = &quot;/bin/sh&quot;; name = &quot;my-derivation&quot;; system = &quot;x86_64-darwin&quot;; }; drvPath = &quot;/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv&quot;; name = &quot;my-derivation&quot;; out = «repeated»; outPath = &quot;/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation&quot;; outputName = &quot;out&quot;; system = &quot;x86_64-darwin&quot;; type = &quot;derivation&quot;; }</code></pre>
+<p>Como ve, nos devuelve un conjunto de atributos que especifica una
+derivación. En el atributo <code>drvPath</code> muestra el archivo donde
+estará la derivación, cuando la creemos. Siempre lo hace bajo
+<em>/nix/store</em>. El nombre del archivo de derivación se construye
+con un <em>hash</em> que ha calculado con los datos de entrada seguida
+de un guión y del nombre que le hemos dado en el parámetro
+<code>name</code>.</p>
+<p>La razón de ser de ese <em>hash</em> es para que se puedan tener
+instancias distintas de un mismo <em>software</em>.</p>
+<p>Con el atributo <code>outPath</code> nos muestra la ruta del
+ejecutable que se obtendrá al final cuando se construya el ejecutable a
+partir de la derivación. También se encontrará ubicado bajo la carpeta
+<em>/nix/store</em>.</p>
+<p>Para crear realmente la derivación, cosa que llaman
+<em>instanciar</em> la derivación, se hace:</p>
+<pre><code>$ nix-instantiate ./example.nix
+warning: you did not specify &#39;--add-root&#39;; the result might be removed by the garbage collector
+/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv</code></pre>
+<p>Se ha hecho de forma correcta, aunque muestre una advertencia
+(<em>warning</em>). No se preocupe por esta.</p>
+<p>Ahí vuelve a mostrar el mismo archivo de derivación que puso antes.
+Puede comprobar que efectivamente ahora existe dicho archivo.</p>
+<pre><code>$ ls -lah /nix/store/46wid*
+-r--r--r--  1 root  nixbld   286B Jan  1  1970 /nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv</code></pre>
+<p>De hecho, en la carpeta <em>/nix/store</em> se tienen también las
+derivaciones de todos los paquetes instalados mediante Nix, incluso los
+que ha instalado de otros, como puede comprobar con:</p>
+<pre><code>$ ls -lah /nix/store/*.drv</code></pre>
+<p>Si abre dicho archivo, es decir
+<em>/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv</em>,</p>
+<pre><code>Derive([(&quot;out&quot;,&quot;/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation&quot;,&quot;&quot;,&quot;&quot;)],[],[],&quot;x86_64-darwin&quot;,&quot;/bin/sh&quot;,[&quot;-c&quot;,&quot;echo Hello &gt; $out&quot;],[(&quot;builder&quot;,&quot;/bin/sh&quot;),(&quot;name&quot;,&quot;my-derivation&quot;),(&quot;out&quot;,&quot;/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation&quot;),(&quot;system&quot;,&quot;x86_64-darwin&quot;)])</code></pre>
+<p>advertirá que es básicamente lo mismo que nos mostró con la
+evaluación de la espeficicación de la evaluación.</p>
+<p>Una vez que se tiene creada la derivación, se debe realizar esta
+(<em>to realise it</em>). Se hace del modo siguiente:</p>
+<pre><code>$ nix-store --realise /nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv
+this derivation will be built:
+  /nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv
+building &#39;/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv&#39;...
+warning: you did not specify &#39;--add-root&#39;; the result might be removed by the garbage collector
+/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation</code></pre>
+<p>Nos devuelve la misma advertencia de antes. El comando nos devuelve
+la ruta del ejecutable construido:
+<code>/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation</code>,
+que es la misma que la del parámetro <code>outPath</code> de antes.
+Vamos a ejecutarlo para comprobar que se ejecuta correctamente:</p>
+<pre><code>$ cat /nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation
+Hello</code></pre>
+<p>En cualquier caso, esta forma de construir paquetes tiene muchos
+inconvenientes. Me refiero a mediante la función <code>derivation</code>
+de <code>builtins</code>. Por ejemplo, en este caso, dependemos de que
+se encuentre instalado previamente en el sistema el <em>software</em>
+<code>sh</code>, en la ruta que hemos especificado (<em>/bin/sh</em>);
+cosa que además debemos conocer. También, que tenemos que TKTK.</p>
+<p>Es decir, de este modo, tal y como lo hemos construido
+(<em>build</em>) el paquete, tenemos que hacer por nosotros mismos
+prácticamente todo.</p>
+<p>La forma que tenemos de hacernos la vida más fácil aquí es haciendo
+uso de <code>nixpkgs</code>. Vamos a modificarlo para hacerlo más
+cómodamente.</p>
+<div class="sourceCode" id="cb76"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> &lt;nixpkgs&gt; <span class="op">{};</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">builtins</span><span class="op">.</span>derivation <span class="op">{</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">name</span> <span class="op">=</span> <span class="st">&quot;my-derivation&quot;</span><span class="op">;</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">system</span> <span class="op">=</span> <span class="st">&quot;x86_64-darwin&quot;</span><span class="op">;</span></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">builder</span> <span class="op">=</span> pkgs<span class="op">.</span>bash<span class="op">;</span></span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">args</span> <span class="op">=</span> <span class="op">[</span> <span class="st">&quot;-c&quot;</span> <span class="st">&quot;echo Hello &gt; $out&quot;</span> <span class="op">];</span></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>También, en lugar de usar los comandos <code>nix-instantiate</code> y
+<code>nix-store --realise</code>, usaremos</p>
+<pre><code>$ nix build --file ./example.nix
+error: builder for &#39;/nix/store/vkhirw1vzwzxlpa9mrc0qvfmxf8jxrq4-my-derivation.drv&#39; failed with exit code 71;
+       last 1 log lines:
+       &gt; sandbox-exec: execvp() of &#39;/nix/store/a0a4dznjllw3bicpccvm2nc74zymgyiq-bash-5.2p26&#39; failed: Permission denied
+       For full logs, run &#39;nix log /nix/store/vkhirw1vzwzxlpa9mrc0qvfmxf8jxrq4-my-derivation.drv&#39;.</code></pre>
+<p>Bueno, esto ha fallado. A él también le falló. Vamos a usar mejor
+otras cosas distintas al conjunto de atributos <code>derivation</code>.
+Vamos a usar, en su lugar, un <em>helper</em> llamado
+<code>runCommand</code> dentro de <code>nixpkgs</code>.</p>
+<div class="sourceCode" id="cb78"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> &lt;nixpkgs&gt; <span class="op">{};</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>runCommand <span class="st">&quot;my-derivation&quot;</span> <span class="op">{}</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="st">        echo Hello &gt; $out</span></span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &#39;&#39;</span></span></code></pre></div>
+<p>Los comentarios multilíena se encierran en Nix entre dos comillas
+simples (<code>''</code>).</p>
+<p>Ahora, no se queja:</p>
+<pre><code>$ nix build --file ./example.nix</code></pre>
+<p>A diferencia de antes, ahora no nos ha dado la ruta en la que se
+encuentra el paquete instalado. Pero, si consultamos el contenido de la
+carpeta desde la que hemos lanzado el comando <code>nix build</code>,
+vemos un archivo llamado <em>result</em>, que no estaba antes. Es un
+vínculo simbólico a dicho ejecutable.</p>
+<pre><code>$ ls -lah
+total 16
+drwxr-xr-x  5 ctafur  staff   160B Apr 19 13:19 .
+drwxr-xr-x  6 ctafur  staff   192B Apr 18 09:45 ..
+-rw-r--r--  1 ctafur  staff   114B Apr 19 13:18 example.nix
+-rw-r--r--  1 ctafur  staff    48B Apr 18 10:43 other-file.nix
+lrwxr-xr-x  1 ctafur  staff    57B Apr 19 13:19 result -&gt; /nix/store/4f1szldkaak4i2zw59wp7mjfjgmj4cqq-my-derivation</code></pre>
+<p>No hace falta copiar la ruta. Podemos llamar directamente a
+<em>result</em> y se ejecutará el paquete.</p>
+<pre><code>$ cat result
+Hello</code></pre>
+<p>Existen otros <em>wrappers</em> de <code>derivation</code> que se
+suelen usar más que <code>runCommand</code>. Por ejemplo,
+<code>mkDerivation</code>.</p>
+<div class="sourceCode" id="cb82"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> &lt;nixpkgs&gt; <span class="op">{};</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>stdenv<span class="op">.</span>mkDerivation <span class="op">{</span></span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">name</span> <span class="op">=</span> <span class="st">&quot;my-derivation&quot;</span><span class="op">;</span></span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">builder</span> <span class="op">=</span> <span class="st">&quot;/bin/sh&quot;</span><span class="op">;</span></span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">args</span> <span class="op">=</span> <span class="op">[</span> <span class="st">&quot;-c&quot;</span> <span class="st">&quot;echo Hello &gt; $out&quot;</span> <span class="op">];</span></span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">src</span> <span class="op">=</span> <span class="ss">./.</span><span class="op">;</span></span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>El parámetro <code>src</code> es obligatorio en esta función. Es
+importante no olvidar que una derivación requiere de una fuente
+(<em>source</em>). En este caso, le hemos dado la carpeta actual.</p>
+<p>Se instalaría del mismo modo que antes:</p>
+<pre><code>$ nix build --file ./example.nix
+$ cat result
+Hello</code></pre>
+<p>La función <code>mkDerivation</code> hace más cosas que
+<code>runCommand</code>. Por ejemplo, permite crear fases
+(<em>phases</em>) en la construcción del paquete, que sería parecido a
+las capas en la construcción de una imagen de contenedores OCI.</p>
+<div class="sourceCode" id="cb84"><pre
+class="sourceCode nix"><code class="sourceCode nix"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">pkgs</span> <span class="op">=</span> <span class="bu">import</span> &lt;nixpkgs&gt; <span class="op">{};</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="kw">in</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>    pkgs<span class="op">.</span>stdenv<span class="op">.</span>mkDerivation <span class="op">{</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">name</span> <span class="op">=</span> <span class="st">&quot;my-derivation&quot;</span><span class="op">;</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">src</span> <span class="op">=</span> <span class="ss">./.</span><span class="op">;</span></span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">installPhase</span> <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a><span class="st">            echo Hello &gt; $out</span></span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a><span class="st">        &#39;&#39;</span><span class="op">;</span></span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>Se construye como antes:</p>
+<pre><code>$ nix build --file ./example.nix
+$ cat result
+Hello</code></pre>
+<p>La diferencia entre <code>mkDerivation</code> y
+<code>runCommand</code> está en que este último está más pensado para
+introducir <em>scripts</em> de <em>shell</em>, mientras que el primero
+es para hacer derivaciones realmente. Siempre se pueden hacer con
+<code>derivation</code>, pero es mucho más trabajoso y hay que tener en
+cuenta muchas más cosas. Sin embargo, con estos dos <em>helpers</em> o
+<em>wrappers</em> es mucho más cómodo.</p>
+</section>
+<section id="el-sistema-module" class="level2">
+<h2>El sistema <em>module</em></h2>
+<p>Es una forma genérica de proporcionar configuración.</p>
+<p>Vamos a probar con estos en el REPL.</p>
+<p>Lo primero que vamos a hacer es cargar <code>nixpkgs</code>:</p>
+<pre><code>nix-repl&gt; :l &lt;nixpkgs&gt;</code></pre>
+<p>Ahora,</p>
+<pre><code>nix-repl&gt; modulea = { options.a.enable = lib.mkEnable.Options; }</code></pre>
+<!-- MINUTO 55. Lo cierto es que esta parte es bastante caótica. No sé qué
+es lo que quería hacer ahí. -->
+<p>Es decir,</p>
+<pre><code>nix-repl&gt; :l &lt;nixpkgs&gt;
+nix-repl&gt; modulea = { options.a.enable = lib.mkEnable.Options; }
+nix-repl&gt; result = lib.evalModules { modules = [ modulea ]; }
+nix-repl&gt; result
+{ _module = { ... }; _type = &quot;configuration&quot;; class = null; config = { ... }; extendModules = «lambda @ /nix/store/kldyrambq3k5kgg61x2qrcwnyljmfwqq-nixpkgs/nixpkgs/lib/modules.nix:303:23»; options = { ... }; type = { ... }; }
+nix-repl&gt; result.options
+{ _module = { ... }; a = { ... }; }
+nix-repl&gt; result.options.a
+{ enable = { ... }; }
+nix-repl&gt; result.options.a.enable
+{ __toString = «lambda @ /nix/store/kldyrambq3k5kgg61x2qrcwnyljmfwqq-nixpkgs/nixpkgs/lib/modules.nix:816:22»; _type = &quot;option&quot;; declarationPositions = [ ... ]; declarations = [ ... ]; default = false; definitions = [ ... ]; definitionsWithLocations = [ ... ]; description = &quot;Whether to enable A.&quot;; example = true; files = [ ... ]; highestPrio = 1500; isDefined = true; loc = [ ... ]; options = [ ... ]; type = { ... }; value = false; }
+nix-repl&gt;
+nix-repl&gt;
+nix-repl&gt; moduleb = { options.b.enable = lib.mkEnableOption &quot;B&quot;; } 
+nix-repl&gt; result = lib.evalModules { modules = [ moduleb ]; }      
+nix-repl&gt; result.options
+{ _module = { ... }; b = { ... }; }
+nix-repl&gt;
+nix-repl&gt; result.options.b.enable
+{ __toString = «lambda @ /nix/store/kldyrambq3k5kgg61x2qrcwnyljmfwqq-nixpkgs/nixpkgs/lib/modules.nix:816:22»; _type = &quot;option&quot;; declarationPositions = [ ... ]; declarations = [ ... ]; default = false; definitions = [ ... ]; definitionsWithLocations = [ ... ]; description = &quot;Whether to enable B.&quot;; example = true; files = [ ... ]; highestPrio = 1500; isDefined = true; loc = [ ... ]; options = [ ... ]; type = { ... }; value = false; }</code></pre>
+<p>Como puede ver, ambos han sido combinados. Es decir, todos los
+módulos colapsan (<em>collapse</em>).</p>
+<p>Todos los módulos toman 3 cosas: <code>options</code>,
+<code>config</code> y <code>imports</code>. El último ya lo hemos visto.
+<code>options</code> es lo que hemos visto ahora mismo. Donde las cosas
+sí son algo diferentes es con <code>config</code>.</p>
+<pre><code>nix-repl&gt; moduleb = { config = { a.enable = true; }; }
+nix-repl&gt; result = lib.evalModules { modules = [ modulea moduleb ]; }
+nix-repl&gt; result.config.a.enable
+true</code></pre>
+<p>Sin embargo,</p>
+<pre><code>nix-repl&gt; result = lib.evalModules { modules = [ moduleb ]; }
+nix-repl&gt; result.config.a.enable
+error: The option `a&#39; does not exist. Definition values:
+       - In `&lt;unknown-file&gt;&#39;:
+           {
+             enable = true;
+           }
+
+       It seems as if you&#39;re trying to declare an option by placing it into `config&#39; rather than `options&#39;!</code></pre>
+<p>Esto sería como un error de tipos en el sistema de módulos.</p>
+<p>Ahora, vamos a crear una opción de un tipo customizado.</p>
+<pre><code>nix-repl&gt; modulec = { options.output = lib.mkOption { type = lib.types.str; }; }
+nix-repl&gt; result = lib.evalModules { modules = [ modulea moduleb modulec ]; }
+nix-repl&gt; moduleb = { config, ... }: { config = { output = &quot;something&quot;; }; }
+nix-repl&gt; result = lib.evalModules { modules = [ modulea moduleb modulec ]; }
+nix-repl&gt; result.config
+{ a = { ... }; output = &quot;something&quot;; }</code></pre>
+<p>Ahora, deseamos que la configuración de <code>moduleb</code> solo se
+habilite cuando se <q>encienda</q> <code>A</code>.</p>
+<pre><code>nix-repl&gt; moduleb = { config, ... }: { config = lib.mkIf config.a.enable { output = &quot;something&quot;; }; }
+nix-repl&gt; result = lib.evalModules { modules = [ modulea moduleb modulec ]; }
+nix-repl&gt; result.config
+{ a = { ... }; output = «error: error: The option `output&#39; is used but not defined.»; }</code></pre>
+</section>
+</section>
+<section id="paquetes-instalados" class="level1">
+<h1>Paquetes instalados</h1>
+<pre><code>age
+bash
+starship
+gnugrep
+gh
+tree-sitter
+ffmpeg-full
+noto-fonts-cjk-sans
+noto-fonts-lgc-plus
+xz
+zstd
+neovim
+typst
+typst-lsp
+typstfmt
+atuin
+stylua
+sqls
+restic
+ripgrep
+go
+zsh-autocomplete
+zsh-completions
+gopls
+yaml-language-server
+nix-zsh-completions
+darwin.cctools
+gnupg
+gnumake
+wget
+macfuse-stubs
+gawk
+p7zip
+ccls
+texlive-combined-full-2023-final
+texlab
+tree-sitter-rst-grammar
+tree
+bash-completion
+nix-bash-completions
+open-pdf-sign
+go-task
+mpv
+jetbrains-mono</code></pre>
+<p>Otros que quizás me interesaría instalar:</p>
+<pre><code>sqlite
+lua
+# luajit -- Conflicto con lua
+font-jetbrains-mono-nerd-font
+python3
+python3-yt-dlp
+pandoc
+onlyoffice-bin -- quizás</code></pre>
+<p>Quizás, la de las fuentes es mejor quitarla de Homebrew y usar
+simplemente la de Nix.</p>
+<p>Para entornos de C:</p>
+<pre><code>gdb
+valgrind</code></pre>
+</section>
+<!--</main>-->
+</body>
+</html>

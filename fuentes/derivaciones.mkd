@@ -1,0 +1,445 @@
+
+
+
+### Derivaciones
+
+Las _derivaciones_ (_derivations_) son las unidades fundamentales para la
+construcción (_building_) y empaquetamiento (_packaging_) del _software_.
+Una derivación es una especificación de un proceso de construcción; no la
+salida de la construcción. Describe todo lo que se necesita para crear un
+paquete, asegurándose de que las construcciones son reproducibles y
+aisladas.
+
+<!-- El lenguaje Nix se creó con el propósito de escribir derivaciones -->
+
+¿Qué hay dentro de una derivación? Una derivación es básicamente una
+"receta" escrita en el lenguaje Nix. Es un conjunto de atributos ---la
+estructura de datos básica de Nix, que no es más que una colección de pares
+clave-valor--- que contiene toda la información necesaria para que el gestor
+de paquetes Nix construya un paquete de _software_. Entre las claves de los
+atributos se encuentran las siguientes:
+
+- `builder`: El programa que realiza la construcción. A menudo se trata de
+  un _script_ de _shell_.
+- `args`: Lista con los argumentos que se pasan al comando de `builder`.
+- `name`: Un nombre único para el paquete resultante; por ejemplo,
+  `hello-2.12.1`.
+- `src`: El código fuente (_source code_) para construir. A menudo se
+  obtiene (_fetch_) de una URL o una ruta local (_local path_).
+- `system`: La arquitectura para la que se está construyendo el paquete; por
+  ejemplo, `x86_64-linux`.
+- `buildInputs`: Una lista de otras derivaciones (dependencias) que son
+  requeridas para construir el paquete.
+- `propagatedBuildInputs`: Dependencias que se requieren no solo para
+  construir el paquete sino también para ejecutarlo.
+
+Cuando se le pide a Nix que construya un paquete (por ejemplo, mediante el
+uso del comando `nix-build`), este busca el archivo de la derivación para
+dicho paquete. Este archivo contiene el _blueprint_ completo para la
+construcción. Entonces Nix
+
+- Resuelve las dependencias. Comprueba primero si todas las `buildInputs` y
+  otras dependencias se encuentran ya construidas en la tienda Nix (_Nix
+  store_). Si no es así, las construye primero.
+
+- Crea un entorno aislado (_sandboxed environment_). Nix crea un entorno
+  hermético para el proceso de construcción. Este _sandbox_ se asegura de que
+  el _build_ solo puede acceder al código y las dependencias especificadas. No
+  puede ver o user nada más del sistema, como bibliotecas o herramientas
+  instaladas fuera de la tienda Nix.
+
+- Ejecuta el _builder_. Nix ejecuta el _script_ de construcción con los
+  argumentos especificados dentro del _sandbox_. Este _script_ normalmente
+  realiza los pasos que tradicionalmente se usan para compilar código fuente
+  en sistemas de tipo Unix, es decir, `configure`, `make` y `make install`.
+
+- Almacena la salida. El paquete una vez construido es almacenado en la
+  tienda Nix, un directorio especial, normalmente con la ruta _/nix/store_.
+  Cada paquete tiene una ruta única y accesible por el contenido; por ejemplo,
+  _/nix/store/1y9b6348hgzb...-hello-2.12.1_.La primera parte del nombre del
+  archivo es un _hash_ de todos sus _inputs_ y de la receta de construcción.
+
+
+
+---
+
+
+Dentro de los elementos que vienen de serie en nuestra instalación de Nix,
+que se encuentran en el conjunto de atributos `builtins`, se tiene la
+función `derivation`. Sabemos que se trata de una función porque, si la
+invocamos desde el REPL, muestra lo siguiente:
+
+```
+nix-repl> builtins.derivation
+«lambda @ /builtin/derivation.nix:5:1»
+```
+
+Como ve, nos referimos a esta empleando la notación punto:
+`builtins.derivation`. Aun así, esta no se puede invocar sin especificar los
+valores para ciertos parámetros.
+
+```nix
+builtins.derivation {
+    name = "my-derivation";
+    system = "x86_64-darwin";
+
+    builder = "/bin/sh";
+    args = [ "-c" "echo Hello > $out" ];
+}
+```
+
+Estos parámetros son `name`, que es el nombre que queramos que tenga esta.
+También, `system`, donde se debe especificar el nombre del sistema sobre el
+que se podrá ejecutar. Se podría consultar en el REPL del modo siguiente:
+
+```
+nix-repl> builtins.attrNames pkgs.lib.platforms
+```
+
+Puede ser, por ejemplo, para Linux en arquitectura x86 de 64 bits,
+`x86_64-linux`.
+
+También es obligatorio el parámetro `builder`, que es el programa del que se
+va a crear la derivación. Como parámetro opcional, complementando al
+_software_ que se incluya en `builder`, se tiene el parámetro `args`, que
+especifica una lista con los argumentos que deseamos que tenga dicho
+comando.
+
+En este ejemplo, se ha especificado que se construya el _software_ que se
+encuentra en el archivo _/bin/sh_. Además, que se le pasen como argumentos
+`-c` y `echo Hello > $out`, cosa que quiere decir que se muestre en la
+salida estándar de ese _shell_ (_/bin/_sh_) la cadena `Hello`. Advierta que
+`$out` tiene un significado especial en Nix. Indica la variable de salida,
+es decir, a dónde irá la salida del programa TKTK.
+
+Una vez construida la espeficicación de la derivación, puede evaluarla,
+aunque no es un paso necesario. Se hace con
+
+```
+$ nix eval --file ./example.nix
+{ all = [ «repeated» ]; args = [ "-c" "echo Hello > $out" ]; builder = "/bin/sh"; drvAttrs = { args = «repeated»; builder = "/bin/sh"; name = "my-derivation"; system = "x86_64-darwin"; }; drvPath = "/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv"; name = "my-derivation"; out = «repeated»; outPath = "/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation"; outputName = "out"; system = "x86_64-darwin"; type = "derivation"; }
+```
+
+Como ve, nos devuelve un conjunto de atributos que especifica una
+derivación. En el atributo `drvPath` muestra el archivo donde estará la
+derivación, cuando la creemos. Siempre lo hace bajo _/nix/store_. El nombre
+del archivo de derivación se construye con un _hash_ que ha calculado con
+los datos de entrada seguida de un guión y del nombre que le hemos dado en
+el parámetro `name`.
+
+La razón de ser de ese _hash_ es para que se puedan tener instancias
+distintas de un mismo _software_.
+
+Con el atributo `outPath` nos muestra la ruta del ejecutable que se obtendrá
+al final cuando se construya el ejecutable a partir de la derivación.
+También se encontrará ubicado bajo la carpeta _/nix/store_.
+
+Para crear realmente la derivación, cosa que llaman _instanciar_ la
+derivación, se hace:
+
+```
+$ nix-instantiate ./example.nix
+warning: you did not specify '--add-root'; the result might be removed by the garbage collector
+/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv
+```
+
+Se ha hecho de forma correcta, aunque muestre una advertencia (_warning_).
+No se preocupe por esta.
+
+Ahí vuelve a mostrar el mismo archivo de derivación que puso antes. Puede
+comprobar que efectivamente ahora existe dicho archivo.
+
+```
+$ ls -lah /nix/store/46wid*
+-r--r--r--  1 root  nixbld   286B Jan  1  1970 /nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv
+```
+
+De hecho, en la carpeta _/nix/store_ se tienen también las derivaciones de
+todos los paquetes instalados mediante Nix, incluso los que ha instalado de
+otros, como puede comprobar con:
+
+```
+$ ls -lah /nix/store/*.drv
+```
+
+Si abre dicho archivo, es decir
+_/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv_,
+
+```
+Derive([("out","/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation","","")],[],[],"x86_64-darwin","/bin/sh",["-c","echo Hello > $out"],[("builder","/bin/sh"),("name","my-derivation"),("out","/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation"),("system","x86_64-darwin")])
+```
+
+advertirá que es básicamente lo mismo que nos mostró con la evaluación de la
+espeficicación de la evaluación.
+
+Una vez que se tiene creada la derivación, se debe realizar esta (_to
+realise it_). Se hace del modo siguiente:
+
+```
+$ nix-store --realise /nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv
+this derivation will be built:
+  /nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv
+building '/nix/store/46wid4abl3kj9n991753kh7ndslgkijn-my-derivation.drv'...
+warning: you did not specify '--add-root'; the result might be removed by the garbage collector
+/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation
+```
+
+Nos devuelve la misma advertencia de antes. El comando nos devuelve la ruta
+del ejecutable construido:
+`/nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation`, que es la misma
+que la del parámetro `outPath` de antes. Vamos a ejecutarlo para comprobar
+que se ejecuta correctamente:
+
+```
+$ cat /nix/store/rvs1ggwg147y5r8b2g0845zzlvrv670b-my-derivation
+Hello
+```
+
+En cualquier caso, esta forma de construir paquetes tiene muchos
+inconvenientes. Me refiero a mediante la función `derivation` de `builtins`.
+Por ejemplo, en este caso, dependemos de que se encuentre instalado
+previamente en el sistema el _software_ `sh`, en la ruta que hemos
+especificado (_/bin/sh_); cosa que además debemos conocer. También, que
+tenemos que TKTK.
+
+Es decir, de este modo, tal y como lo hemos construido (_build_) el paquete,
+tenemos que hacer por nosotros mismos prácticamente todo.
+
+La forma que tenemos de hacernos la vida más fácil aquí es haciendo uso de
+`nixpkgs`. Vamos a modificarlo para hacerlo más cómodamente.
+
+```nix
+let
+    pkgs = import <nixpkgs> {};
+in
+    builtins.derivation {
+        name = "my-derivation";
+        system = "x86_64-darwin";
+
+        builder = pkgs.bash;
+        args = [ "-c" "echo Hello > $out" ];
+    }
+```
+
+También, en lugar de usar los comandos `nix-instantiate` y `nix-store
+--realise`, usaremos
+
+```
+$ nix build --file ./example.nix
+error: builder for '/nix/store/vkhirw1vzwzxlpa9mrc0qvfmxf8jxrq4-my-derivation.drv' failed with exit code 71;
+       last 1 log lines:
+       > sandbox-exec: execvp() of '/nix/store/a0a4dznjllw3bicpccvm2nc74zymgyiq-bash-5.2p26' failed: Permission denied
+       For full logs, run 'nix log /nix/store/vkhirw1vzwzxlpa9mrc0qvfmxf8jxrq4-my-derivation.drv'.
+```
+
+Bueno, esto ha fallado. A él también le falló. Vamos a usar mejor otras
+cosas distintas al conjunto de atributos `derivation`. Vamos a usar, en su
+lugar, un _helper_ llamado `runCommand` dentro de `nixpkgs`.
+
+```nix
+let
+    pkgs = import <nixpkgs> {};
+in
+    pkgs.runCommand "my-derivation" {} ''
+        echo Hello > $out
+    ''
+```
+
+Los comentarios multilíena se encierran en Nix entre dos comillas simples
+(`''`).
+
+Ahora, no se queja:
+
+```
+$ nix build --file ./example.nix
+```
+
+A diferencia de antes, ahora no nos ha dado la ruta en la que se encuentra
+el paquete instalado. Pero, si consultamos el contenido de la carpeta desde
+la que hemos lanzado el comando `nix build`, vemos un archivo llamado
+_result_, que no estaba antes. Es un vínculo simbólico a dicho ejecutable.
+
+```
+$ ls -lah
+total 16
+drwxr-xr-x  5 ctafur  staff   160B Apr 19 13:19 .
+drwxr-xr-x  6 ctafur  staff   192B Apr 18 09:45 ..
+-rw-r--r--  1 ctafur  staff   114B Apr 19 13:18 example.nix
+-rw-r--r--  1 ctafur  staff    48B Apr 18 10:43 other-file.nix
+lrwxr-xr-x  1 ctafur  staff    57B Apr 19 13:19 result -> /nix/store/4f1szldkaak4i2zw59wp7mjfjgmj4cqq-my-derivation
+```
+
+No hace falta copiar la ruta. Podemos llamar directamente a _result_ y se
+ejecutará el paquete.
+
+```
+$ cat result
+Hello
+```
+
+Existen otros _wrappers_ de `derivation` que se suelen usar más que
+`runCommand`. Por ejemplo, `mkDerivation`.
+
+```nix
+let
+    pkgs = import <nixpkgs> {};
+in
+    pkgs.stdenv.mkDerivation {
+        name = "my-derivation";
+        builder = "/bin/sh";
+        args = [ "-c" "echo Hello > $out" ];
+
+        src = ./.;
+    }
+```
+
+El parámetro `src` es obligatorio en esta función. Es importante no olvidar
+que una derivación requiere de una fuente (_source_). En este caso, le hemos
+dado la carpeta actual.
+
+Se instalaría del mismo modo que antes:
+
+```
+$ nix build --file ./example.nix
+$ cat result
+Hello
+```
+
+La función `mkDerivation` hace más cosas que `runCommand`. Por ejemplo,
+permite crear fases (_phases_) en la construcción del paquete, que sería
+parecido a las capas en la construcción de una imagen de contenedores OCI.
+
+```nix
+let
+    pkgs = import <nixpkgs> {};
+in
+    pkgs.stdenv.mkDerivation {
+        name = "my-derivation";
+
+        src = ./.;
+
+        installPhase = ''
+            echo Hello > $out
+        '';
+    }
+```
+
+Se construye como antes:
+
+```
+$ nix build --file ./example.nix
+$ cat result
+Hello
+```
+
+La diferencia entre `mkDerivation` y `runCommand` está en que este último
+está más pensado para introducir _scripts_ de _shell_, mientras que el
+primero es para hacer derivaciones realmente. Siempre se pueden hacer con
+`derivation`, pero es mucho más trabajoso y hay que tener en cuenta muchas
+más cosas. Sin embargo, con estos dos _helpers_ o _wrappers_ es mucho más
+cómodo.
+
+
+
+
+### El sistema _module_
+
+Es una forma genérica de proporcionar configuración.
+
+Vamos a probar con estos en el REPL.
+
+Lo primero que vamos a hacer es cargar `nixpkgs`:
+
+```
+nix-repl> :l <nixpkgs>
+```
+
+Ahora,
+
+```
+nix-repl> modulea = { options.a.enable = lib.mkEnable.Options; }
+```
+
+<!-- MINUTO 55. Lo cierto es que esta parte es bastante caótica. No sé qué
+es lo que quería hacer ahí. -->
+
+Es decir,
+
+```
+nix-repl> :l <nixpkgs>
+nix-repl> modulea = { options.a.enable = lib.mkEnable.Options; }
+nix-repl> result = lib.evalModules { modules = [ modulea ]; }
+nix-repl> result
+{ _module = { ... }; _type = "configuration"; class = null; config = { ... }; extendModules = «lambda @ /nix/store/kldyrambq3k5kgg61x2qrcwnyljmfwqq-nixpkgs/nixpkgs/lib/modules.nix:303:23»; options = { ... }; type = { ... }; }
+nix-repl> result.options
+{ _module = { ... }; a = { ... }; }
+nix-repl> result.options.a
+{ enable = { ... }; }
+nix-repl> result.options.a.enable
+{ __toString = «lambda @ /nix/store/kldyrambq3k5kgg61x2qrcwnyljmfwqq-nixpkgs/nixpkgs/lib/modules.nix:816:22»; _type = "option"; declarationPositions = [ ... ]; declarations = [ ... ]; default = false; definitions = [ ... ]; definitionsWithLocations = [ ... ]; description = "Whether to enable A."; example = true; files = [ ... ]; highestPrio = 1500; isDefined = true; loc = [ ... ]; options = [ ... ]; type = { ... }; value = false; }
+nix-repl>
+nix-repl>
+nix-repl> moduleb = { options.b.enable = lib.mkEnableOption "B"; } 
+nix-repl> result = lib.evalModules { modules = [ moduleb ]; }      
+nix-repl> result.options
+{ _module = { ... }; b = { ... }; }
+nix-repl>
+nix-repl> result.options.b.enable
+{ __toString = «lambda @ /nix/store/kldyrambq3k5kgg61x2qrcwnyljmfwqq-nixpkgs/nixpkgs/lib/modules.nix:816:22»; _type = "option"; declarationPositions = [ ... ]; declarations = [ ... ]; default = false; definitions = [ ... ]; definitionsWithLocations = [ ... ]; description = "Whether to enable B."; example = true; files = [ ... ]; highestPrio = 1500; isDefined = true; loc = [ ... ]; options = [ ... ]; type = { ... }; value = false; }
+```
+
+Como puede ver, ambos han sido combinados. Es decir, todos los módulos
+colapsan (_collapse_).
+
+Todos los módulos toman 3 cosas: `options`, `config` y `imports`. El último
+ya lo hemos visto. `options` es lo que hemos visto ahora mismo. Donde las
+cosas sí son algo diferentes es con `config`.
+
+```
+nix-repl> moduleb = { config = { a.enable = true; }; }
+nix-repl> result = lib.evalModules { modules = [ modulea moduleb ]; }
+nix-repl> result.config.a.enable
+true
+```
+
+Sin embargo,
+
+```
+nix-repl> result = lib.evalModules { modules = [ moduleb ]; }
+nix-repl> result.config.a.enable
+error: The option `a' does not exist. Definition values:
+       - In `<unknown-file>':
+           {
+             enable = true;
+           }
+
+       It seems as if you're trying to declare an option by placing it into `config' rather than `options'!
+```
+
+Esto sería como un error de tipos en el sistema de módulos.
+
+Ahora, vamos a crear una opción de un tipo customizado.
+
+```
+nix-repl> modulec = { options.output = lib.mkOption { type = lib.types.str; }; }
+nix-repl> result = lib.evalModules { modules = [ modulea moduleb modulec ]; }
+nix-repl> moduleb = { config, ... }: { config = { output = "something"; }; }
+nix-repl> result = lib.evalModules { modules = [ modulea moduleb modulec ]; }
+nix-repl> result.config
+{ a = { ... }; output = "something"; }
+```
+
+Ahora, deseamos que la configuración de `moduleb` solo se habilite cuando se
+"encienda" `A`.
+
+```
+nix-repl> moduleb = { config, ... }: { config = lib.mkIf config.a.enable { output = "something"; }; }
+nix-repl> result = lib.evalModules { modules = [ modulea moduleb modulec ]; }
+nix-repl> result.config
+{ a = { ... }; output = «error: error: The option `output' is used but not defined.»; }
+```
+
+
+
+
+

@@ -1,0 +1,63 @@
+
+
+
+
+## Introducción
+
+Nix es una tecnología que ha comenzado a alcanzar popularidad en los últimos
+años debido a que soluciona algunos de los problemas que se tenían en el
+despliegue (_deployment_) de _software_ y que tecnologías modernas como los
+contenedores OCI (por ejemplo, los de Docker), no llegaban a solucionar.
+
+Nix surgió como una idea que presentó Eelco Dolstra en [su tesis doctoral][]
+en la Universidad de Utretch.
+
+[su tesis doctoral]: https://edolstra.github.io/pubs/phd-thesis.pdf
+
+Al igual que los contenedores OCI, Nix soluciona el famoso problema de "En
+mi máquina funciona". TKTK.
+
+En realidad, Nix es varias cosas: 1) un lenguaje específico de dominio
+(_domain-specific language_ o DSL), de paradigma funcional puro muy
+inspirado en Haskell, 2) un gestor de paquetes (_package manager_) como
+pueden ser Homebrew o APT, y 3) una herramienta para la creación y gestión
+de entornos (_environments_) como alternativa a cosas como los entornos
+`venv` del ecosistema Python o a los contenedores Docker.
+
+Como verá, los entornos de Nix tienen propiedades que los hacen mucho
+mejores a estos otros. De hecho, podríamos considerar que el fin de Nix es
+su uso para entornos. Los otros dos no son más que componentes que sirven
+para tal fin.
+
+Nix puede incluso hacer uso de contenedores OCI, con lo que podríamos
+saltarnos el uso de un gestor de contenedores como Docker. Hay quien afirma
+que el propio Nix es mejor que Docker a este respecto.
+
+Además de lo mencionado, Nix nos aporta otras cosas. Vamos a hacer un
+resumen de todo lo que nos aporta.
+
+- Reproducibilidad (_reproducibility_).
+- Determinismo (_determinism_). Mejor que el de los contenedores OCI.
+- Mayor orden en el sistema de archivos (_filesystem_).
+- Mejor a la hora de desarrollar. Al igual que sucede con los contenedores
+  OCI, al hacer uso de un entorno, en el sistema desde el que desarrollamos
+  TKTK.
+
+Nix no es más seguro que lo demás. Pero sí que puede gestionar contenedores
+en entornos Nix, cosa que puede otorgarle mayor seguridad.
+
+
+<!--
+De hecho, en mi caso particular, al igual que le sucede a muchos otros
+usuarios de Nix, he pasado a instalar menos _software_ para todo el sistema
+(_systemwide_) en favor de crear más frecuentemente entornos para propósitos
+específicos. Por ejemplo, un _software_ que solía instalar de forma global
+en mi sistema de uso personal es `yt-dlp`, que permite la descarga de vídeos
+de sitios web. Ahora, lo que hago es tener un entorno en el que, cuando se
+activa, se tiene de forma local dicha herramienta. Esto es muy propicio para
+herramientas del tipo de `yt-dlp`, que en realidad son más bien bibliotecas
+(_libraries_). TKTK.
+-->
+
+
+

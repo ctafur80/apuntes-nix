@@ -1,0 +1,654 @@
+
+
+
+## Lenguaje Nix
+
+El uso de Nix como gestor de paquetes no ha sido nunca el propósito
+principal de sus creadores. Para sacar el máximo provecho de Nix debe
+aprender a crear y gestionar entornos con este. Para esto, debe aprender lo
+básico del propio lenguaje Nix.
+
+Aunque aquí vamos a seguir el videotutorial titulado Nix From Nothing #1,
+que está bien para una primera aproximación, los conceptos del lenguaje Nix
+vienen mejor explicados en otros tutoriales como [el de
+Nix.dev][nix-dev-tuto-nix-lang]. Además, se tiene como referencia [lo que
+explican][nix-lang-ref] en el manual oficial, que le dará un conocimiento
+más completo.
+
+[nix-dev-tuto-nix-lang]: https://nix.dev/tutorials/nix-language
+[nix-lang-ref]: https://nixos.org/manual/nix/stable/language/
+
+Otra muy buena explicación del lenguaje Nix es
+[esta](https://www.youtube.com/watch?v=5D3nUU1OVx8).
+
+
+
+
+
+### Tipos de datos
+
+La estructura de datos principal de Nix es la que se conoce como _conjunto
+de atributos_ (_attributes set_), que sería en cierto modo parecido a los
+diccionarios de Python (tiene muchos nombres; además de estos, tabla _hash_,
+arreglo asociativo, mapas, etc.). Tiene una sintaxis muy parecida a la del
+formato JSON.
+
+También, hay que tener en cuenta que, ya que se adhiere bastante al
+paradigma funcional, en Nix lo que se maneja son expresiones
+(_expressions_); no afirmaciones (_statements_). Esto permite al lenguaje
+prescindir del signo de punto y coma (`;`, _semicolon_) al final. En
+cualquier caso, por razones de expresividad, se ha dado otro uso a dicho
+símbolo; concretamente, se usa para separar los distintos elementos dentro
+de un conjunto de atributos.
+
+Lo siguiente sería un literal de un conjunto de atributos. Por ejemplo,
+
+```nix
+{
+    name1 = "value1";
+    name2 = "value2";
+}
+```
+
+Tal y como hemos dicho, sería equivalente a un diccionario.
+
+Si en su instalación de Nix tiene activado _flakes_, si introduce lo
+anterior en un archivo como, por ejemplo, _example.nix_, podemos evaluar ese
+conjunto de atributos con el comando siguiente:
+
+```
+$ nix eval --file example.nix
+{ name1 = "value1"; name2 = "value2"; }
+```
+
+El uso del punto y coma en los elementos de un conjunto de atributos es
+obligatorio, incluso en el último de estos (de los elementos).
+
+Otro tipo de dato estructurado que se tiene son las listas (_lists_). Serían
+lo mismo que las listas en Python (mutabilidad? mejor, las tuplas?). TKTK.
+Un literal de lista sería, por ejemplo,
+
+```nix
+[
+    1
+    2
+    3
+]
+```
+
+El espacio o nuevo renglón es el que sirve para delimitar los elementos en
+la lista. La anterior sería igual a la siguiente:
+
+```nix
+[ 1 2 3 ]
+```
+
+Aunque se suele usar como regla de estilo dejar un espacio entre los
+delimitadores y los elementos en su interior, este lo podríamos eliminar si
+lo deseáramos:
+
+```nix
+[1 2 3]
+```
+
+
+
+### `let` _bindings_
+
+Aunque se tenga una expresión declarativa, se pueden especificar valores de
+variables en esta, tal y como se hace, por ejemplo, en las _list
+comprehensions_ de Python. En Nix sucede algo similar. Para esto se usan los
+`let` _bindings_. Por ejemplo,
+
+```nix
+let
+    myNumber = 42;
+in
+    myNumber + 1
+```
+
+Ojo con el punto y coma antes del `in`. Al ser un conjunto de atributos lo
+que introducimos dentro de `let`, debrá tener punto y coma cada uno de los
+elementos ahí. Lo que hay tras `in` es una expresión que hace uso de ese
+conjunto de atributos.
+
+```
+$ nix eval --file 01.nix
+43
+```
+
+Como ve, sigue siendo una expresión pero esta vez esta tiene en cuenta el
+valor de la variable `myNumber`.
+
+Lo considero en realidad una expresión porque lo importante es lo que va
+tras la palabra clave `in`. Lo que va entre `let` e `in` es simplemente para
+hacer a la expresión consciente de los valores de ciertas variables. En
+cualquier caso, ya no estamos en un paradigma funcional puro; bueno, eso
+depende de cómo se considere TKTK.
+
+En cualquier caso, esas variables están confinadas a esa expresión, es
+decir, no tenemos variables globales y, por tanto, no se puede afirmar que
+el programa ejecutándose pase por estados diversos.
+
+
+
+
+
+### Funciones
+
+Nix cuenta también, evidentemente, con funciones. Por ejemplo, así se
+definiría y se invocaría una función que decidimos llamar `greet()`.
+
+```nix
+let
+    greet = name: "Hello, ${name}!";
+in
+    greet "Carlos"
+```
+
+Como ve, la función se define asignando una definición de función anónima
+(_anonymous function_; a estas también las suelen llamar _funciones lambda_,
+_lambda functions_) a una variable (en este caso, `greet`), y esto se hace
+dentro de la parte `let` de un `let` _binding_.
+
+En la definición de la función, lo primero que se pone son los parámetros (o
+parámetros formales). A la derecha de estos, un signo de dos puntos (`:`,
+_colon_), y a su derecha, la propia definición de la función; o su firma
+(_signature_), se podría decir también.
+
+En la parte `in`, se puede invocar la función, con los argumentos (o
+parámetros reales) que deseemos. En este caso, el argumento es el literal de
+cadena `Carlos`. Las comillas sirven para delimitar al literal de cadena y,
+en este caso, no forman parte del mismo; al igual que suele suceder con la
+mayoría de lenguajes de programación.
+
+La sintaxis suele evitar el uso de signos de llaves (`{ }`) y paréntesis
+(`()`). También, como ve, se hace interpolación de cadena (_string
+interpolation_, o plantilla de cadena, _template string_) en los literales
+de cadena, al igual que en tantos otros lenguajes. En este caso, tiene la
+forma `${<var>}` donde `<var>` será la variable de la que se tomará el valor
+para insertar en esa parte de la cadena.
+
+Al evaluar la expresión `let-in` anterior, dará como resultado
+
+```
+$ Hello, Carlos!
+```
+
+como es evidente.
+
+Si deseamos una función que tenga más de un parámetro de entrada, se puede
+usa lo que en programación funcional llaman el _currying_, es decir, hacer
+uso de una función dentro de otra.
+
+```nix
+let
+    greet = greeting: name: "${greeting}, ${name}!";
+in
+    greet "Howdy" "Carlos"
+```
+
+que devolverá
+
+```
+$ Howdy, Carlos!
+```
+
+Como ve, cuando se dan varios argumentos a una llamada de una función, estos
+se separan mediante espacio.
+
+Ahora, vamos a mezclar las funciones con conjuntos de atributos.
+
+```nix
+let
+    makeSecret = secret: {
+        mySuperSecretValue = secret;
+    };
+in
+    makeSecret "abcd"
+```
+
+que daría
+
+```
+$ nix eval --file example.nix
+{ mySuperSecretValue = "abcd"; }
+```
+
+En este caso, la definición de la función es básicamente un conjunto de
+atributos, como puede ver. Por tanto, lo que devuelve la función será eso
+mismo.
+
+Por cierto, de momento, como verá, estamos haciendo uso de argumentos
+posicionales en las funciones. Ahora, vamos a ver cómo se haría uso de
+argumentos nombrados.
+
+También, se le podría pasar un conjunto de atributos como argumento a la
+función.
+
+```nix
+let
+    makeSecret = secret: {
+        mySuperSecretValue = secret;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que daría
+
+```
+$ nix eval --file example.nix
+{ mySuperSecretValue = { key = "my_secret"; value = "super-secret"; }; }
+```
+
+Ojo con el punto y coma tras `"super-secret"`. En realidad, aquí no hemos
+hecho nada, es decir, este ejemplo no tiene ningún sentido.
+
+Pero quizás no era eso lo que deseábamos hacer, sino lo siguiente:
+
+```nix
+let
+    makeSecret = { key, value }: {
+        mySuperSecretValue = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+{ mySuperSecretValue = "super-secret"; }
+```
+
+Como ve, solo muestra el atributo al que se le da hado un valor. El otro, al
+no haber recibido ningún valor, no lo muestra, pues, en la definición de la
+función, no se da ningún uso al parámetro `key`.
+
+¿Pero cómo podríamos modificar esta función para que sí que haga uso del
+parámetro `key` en la clave del conjunto de atributos? Es muy sencillo; no
+hay más que usar la interpolación de cadena:
+
+```nix
+let
+    makeSecret = { key, value }: {
+        "${key}" = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+{ my_secret = "super-secret"; }
+```
+
+Podríamos haber puesto la clave sin comillas y también sería válido.
+
+```nix
+let
+    makeSecret = { key, value }: {
+        ${key} = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+{ my_secret = "super-secret"; }
+```
+
+Si en la definición de la función solo se hubiera especificado el parámetro
+`value` y, luego, en la llamada, se ponen ambos, nos dará un error.
+
+```nix
+let
+    makeSecret = { value }: {
+        mySuperSecretValue = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que daría
+
+```
+❯ nix eval --file example.nix
+error: 'makeSecret' at /Users/ctafur/temp/nix/nix-from-nothing-tuto/dos/example.nix:2:18 called with unexpected argument 'key'
+
+       at /Users/ctafur/temp/nix/nix-from-nothing-tuto/dos/example.nix:6:5:
+
+            5| in
+            6|     makeSecret { key = "my_secret"; value = "super-secret"; }
+             |     ^
+            7|
+(use '--show-trace' to show detailed location information)
+```
+
+Si deseamos dejar abierta la posibilidad de que se pueda llamar a otros
+argumentos no especificados en la definición de una función, se puede usar
+la notación de elipsis (_ellipsis_): `...`, para indicarlo.
+
+```nix
+let
+    makeSecret = { value, ... }: {
+        mySuperSecretValue = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+{ mySuperSecretValue = "super-secret"; }
+```
+
+Es decir, tampoco hace uso del parámetro `key`, pero esta vez no da error.
+
+Advierta que, en el literal de conjunto de atributos que se usa en la
+definición de la función, las variables en las claves, para ser sustituidas
+por su valor, deben usar la notación de interpolación de cadena, mientras
+que con los valores no sucede esto. Es decir, lo siguiente
+
+```nix
+let
+    makeSecret = { key, value }: {
+        key = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+daría
+
+```
+$ nix eval --file example.nix
+{ key = "super-secret"; }
+```
+
+que no es lo que deseábamos en este caso.
+
+También, se podría hacer más dinámico:
+
+```nix
+let
+    makeSecret = { key, value }: {
+        "user-key:${key}" = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+{ "user-key:my_secret" = "super-secret"; }
+```
+
+Si queremos hacer lo siguiente:
+
+```nix
+let
+    makeSecret = { key, value }: {
+        value = value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+se puede hacer de forma abreviada usando el enunciado `inherit`:
+
+```nix
+let
+    makeSecret = { key, value }: {
+        inherit value;
+    };
+in
+    makeSecret { key = "my_secret"; value = "super-secret"; }
+```
+
+En ambos casos, se tendría como resultado
+
+```
+$ nix eval --file example.nix
+{ value = "super-secret"; }
+```
+
+Imagino que el uso que se da a `inherit` será para hacer pruebas sobre los
+estados de las variables, al igual que en Python se hace con `f"variable="`.
+
+También, se puede tener una función dentro de un conjunto de atributos. La
+forma de acceder a este es mediante la notación punto.
+
+```nix
+let
+    conj_atrib = {
+        greet = greeting: name: "${greeting}, ${name}!";
+    };
+in
+    conj_atrib.greet "Howdy" "Carlos"
+```
+
+TKTK.
+
+También, debe saber que los comentarios son el símbolo `#` para comentar
+hasta final de línea, y, `/*` y `*/`, para abrir y cerrar, respectivamente,
+un comentario multilínea.
+
+
+
+
+
+<!-- --------------------------------------------------------------- -->
+
+Llegados a este punto, básicamente hemos visto lo básico del lenguaje Nix.
+Lo natural sería que el paso siguiente consistiera en integrar este
+conocimiento con Nixpkgs, que son los paquetes junto con una serie de
+fuciones. TKTK. Entre las cosas que haremos con Nixpkgs se encuentran crear
+_helper functions_ para mapas (_maps_), para filtros (_filters_), etc.
+
+Vamos a ver primero cómo se importan otros archivos de Nix.
+
+Creamos el archivo _other-file.nix_ con el contenido siguiente:
+
+```nix
+{
+    greet = name: "Hello, ${name}!";
+}
+```
+
+Como ve, lo único que contiene es un conjunto de atributos cuyo único
+elemento tiene por clave la cadena `"greet"` y, por valor, una función
+anónima.
+
+Ahora, vamos a crear otro archivo Nix, que llamaremos _example.nix_, desde
+el que cargaremos el anterior archivo Nix, _other-file.nix_. En
+_example.nix_, incluiremos lo siguiente:
+
+```nix
+let
+    myLibrary = import ./other-file.nix;
+in
+    myLibrary
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+{ greet = <LAMBDA>; }
+```
+
+En _example.nix_ se la incluido, dentro de un `let` _binding_, una
+importación del contenido de otro archivo Nix; concretamente, de
+_other-file.nix_. El resultado de evaluar _example.nix_ es el esperado. En
+la información que nos da la evaluación, la parte `<LAMBDA>` indica una
+función anónima, pero sin especificar el contenido de esta. En cualquier
+caso, la forma de invocarla es usar la clave asociada a la misma en la
+tabla, es decir, `greet`. Pero ese atributo está dentro del conjunto de
+atributos `myLibrary`, por lo que deberá llamar al `greet` de `myLibrary`,
+cosa que puede hacer usando el operador punto, tal y como se explicó antes.
+
+```nix
+let
+    myLibrary = import ./other-file.nix;
+in
+    myLibrary.greet "Carlos"
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+"Hello, Carlos!"
+```
+
+Esto mismo se puede hacer con los paquetes Nix.
+
+```nix
+let
+    pkgs = import <nixpkgs>;
+in
+    pkgs
+```
+
+que da
+
+```
+$ nix eval --file example.nix
+<LAMBDA>
+```
+
+Como es una función (ya que pone `<LAMBDA>`, se debería especificar algún
+parámetro, o varios de estos en un conjunto de atributos. En realidad,
+`<nixpkgs>` es una función que a su vez contiene muchas cosas a distintos
+niveles de anidamiento: funciones y conjuntos de atributos, principalmente.
+
+```nix
+let
+    pkgs = import <nixpkgs> {};
+in
+    pkgs.lib
+```
+
+Esto nos mostrará todo lo que hay en el atributo `lib` dentro de la lista de
+paquetes (`nixpkgs`). La salida es bastante grande. Tenga cuidado de no
+intentar llamar a `pkgs`, que llamaría a todos los paquetes. Lo hice, al
+seguir este tutorial, y tuve que terminar reiniciando el computador, ya que
+son muchos los paquetes incluidos actualmente.
+
+Con `<nixpkgs>`, lo que hemos hecho es usar esa biblioteca tomada de nuestro
+entorno, es decir, de la de nuestra instalación de Nix. Se podría haber
+optado, alternativamente, a tomarla de su repositorio en GitHub, por
+ejemplo, o de algún otro sitio, especificando la URL que correspondiera.
+
+Con el comando siguiente, se puede consultar de dónde lo toma su instalación
+local:
+
+```
+$ nix-channel --list
+nixpkgs https://nixos.org/channels/nixpkgs-unstable
+```
+
+
+
+
+
+
+### REPL
+
+Una forma bastante cómoda de hacer pruebas con la biblioteca `nixpkgs` es
+desde el REPL de Nix. Si tiene activado _flakes_, se entra con
+
+```
+$ nix repl
+nix-repl>
+```
+
+Una diferencia con el lenguaje en los archivos es que en el REPL no tiene
+que terminar con punto y coma. También, se pueden asignar valores a
+variables sin usar `let`-`in`.
+
+Tiene autocompletado, por lo que puede ir viendo los elementos de las
+distintas bibliotecas.
+
+```
+nix-repl> pkgs = import <nixpkgs> {}
+nix-repl> pkgs.lib.
+```
+
+Si ahí, sin pulsar [Intro]{.kbd}, pulsa [Tab]{.kbd} para hacer
+_tab-completion_, se mostrará todo lo que hay bajo el conjunto de atributos
+`lib` de `nixpkgs`.
+
+Además de los distintos elementos de `nixpkgs`, nuestra instalación trae
+siempre ciertos elementos de serie. A esto los llaman _builtins_. Puede
+consultarlos también:
+
+```
+nix-repl> builtins.
+```
+
+y pulse [Tab]{.kbd}. Por ejemplo, tenemos la función `derivation` dentro de
+`builtins`, a la que podemo hacer alusión con `builtins.derivation`.
+
+```
+nix-repl> builtins.derivation
+«lambda @ /builtin/derivation.nix:5:1»
+```
+
+Como vemos, es una función, ya que pone `lambda`. Esta función tiene varios
+argumentos obligatorios. Si tratamos de invocarla sin esos argumentos,
+
+```nix
+builtins.derivation {}
+```
+
+nos dará un error.
+
+```
+$ nix eval --file example.nix
+error:
+       … while evaluating the attribute 'outPath'
+
+         at /builtin/derivation.nix:19:9: (source not available)
+
+       … while calling the 'getAttr' builtin
+
+         at /builtin/derivation.nix:19:19: (source not available)
+
+       (stack trace truncated; use '--show-trace' to show the full trace)
+
+       error: attribute 'name' missing
+```
+
+Vamos a ver los argumentos:
+
+```nix
+builtins.derivation {
+    name = "my-derivation";
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

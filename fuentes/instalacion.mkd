@@ -1,0 +1,52 @@
+
+
+
+
+## Instalación
+
+Además de la instalación tradicional de Nix, la que [se explica en su
+web][web-nix-install] oficial, ahora existe la posibilidad de instalar una
+distribución de Nix (_Nix distribution_) llamada Determinate Nix. TKTK. Esta
+última tiene algunas ventajas, como TKTK.
+
+[web-nix-install]: https://nixos.org/download/
+
+Lo que se hace en la instalación tradicional es descargar un _script_ de
+_shell_ que se encarga de hacer la instalación. En macOS no hay nada que
+decidir, pero en Linux se puede hacer la instalación monousuario o
+multiusuario. Se recomienda esta última. La diferencia está en que en esta
+se instala como un demonio (_daemon_); por tanto, como un _software_ de tipo
+cliente-servidor.
+
+Tal y como hemos dicho, existe también la posibilidad de instalar una
+distribución de Nix. La más popular es [Determinate Nix][], creada por la
+empresa [Determinate Systems][], en la que actualmente trabaja el propio
+Dolstra, el creador de Nix.
+
+[Determinate Nix]: https://docs.determinate.systems/determinate-nix/
+[Determinate Systems]: https://zero-to-nix.com/
+
+Entre las ventajas que tiene están que es más cómoda de gestionar
+distribución de Nix (Nix _distribution_) que es algo más cómoda de instalar
+y de gestionar que por el método tradicional. Además, con Determinate Nix se
+evitan los problemas que aparecen al instalar Nix en un sistema Linux que
+cuente con SELinux activado.
+
+Ahora, habría que explicar qué son los Flakes.
+
+El principal problema que le encuentro es que de serie hace que se usen
+_flakes_ para todo, lo que conlleva que tenga que tener necesariamente
+conexión a Internet. TKTK. Existe, sin embargo, una forma de evitarlo TKTK.
+Quizás, para comenzar sea mejor hacerlo sin _flakes_, para que no tenga que
+aprender tantas cosas de golpe.
+
+Para hacer la instalación mediante la distribución de Determinate Systems,
+solo hay que seguir las explicaciones del repositorio [`nix-installer`][]
+
+[`nix-installer`]: https://github.com/DeterminateSystems/nix-installer
+
+Esto activa el uso del comando `nix` y cambia también los repositorios. En
+cuanto a los _flakes_, se suele usar con estos. TKTK.
+
+
+
