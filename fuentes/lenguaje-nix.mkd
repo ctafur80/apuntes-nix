@@ -45,7 +45,7 @@ nix-repl>
 ```
 
 Podríamos introducir expresiones como la siguiente y nos devuelve la
-evaluación de la misma:
+evaluación (_evaluation_) de la misma:
 
 ```
 nix-repl> 9 + 9
@@ -74,12 +74,14 @@ $ nix-instantiate --eval expresion.nix
 
 En cuanto a las características del tipado en Nix, hay que decir que se
 trata de tipado fuerte (_strongly typed_), pero aun así no cuenta con tipado
-estático sino dinámico (_dynamic typed_).
+estático, sino dinámico (_dynamic typed_).
 
 
 
 
 #### Tipos simples
+
+<!-- De hecho, no sé si se pueden crear tipos propios. -->
 
 Cuenta con varios tipos de datos predefinidos (_built-in_, también llamados
 _primitivos_). Los tipos de datos simples (también llamados _atómicos_) son:
@@ -129,8 +131,9 @@ null
 ```
 
 Quizás le llame la atención el tipo de datos ruta. Tiene sentido debido al
-uso de Nix. TKTK.
+propósito de Nix.
 
+<!--
 También es predefinido el tipo de datos lista (_list_), aunque este no es
 simple. Un ejemplo de lista sería el siguiente:
 
@@ -148,16 +151,20 @@ nix-repl> [ "uno" "dos" "tres" ]
   "tres"
 ]
 ```
+-->
+
+Ahora, veamos los tipos de datos no simples; aquí es donde se pone
+interesante la cosa.
 
 
 
 
 #### Conjuntos de atributos
 
-El tipo de datos predefinido más interesante en Nix es el **conjunto de
-atributos** (_attribute set_). Se trata de algo parecido a los diccionarios
-de Python o los mapas de _hash_ en otros lenguajes. Evidentemente, también
-se trata de un tipo de datos no simple. Un ejemplo sería el siguiente:
+El tipo de datos predefinido no simple más interesante en Nix es el
+**conjunto de atributos** (_attribute set_). Se trata de algo parecido a los
+diccionarios de Python o los mapas de _hash_ en otros lenguajes. Un ejemplo
+sería el siguiente:
 
 ```nix
 {
@@ -178,11 +185,16 @@ nix-repl> { one = "hello"; two = "world"; three = "something"; }
 }
 ```
 
-A veces lo llaman _conjunto_ (_set_) a secas. Advierta el punto y coma al
-final de cada entrada; este es obligatorio siempre. A cada entrada del
-"conjunto" (separadas por `;`) se la conoce como **atributo** (_attribute_).
-(Lo pongo entrecomillado porque realmente no existe en Nix el tipo
-conjunto.)
+Se podría decir que "existe" el tipo de datos conjunto (_set_), al igual que
+en otros lenguajes; como Python, por ejemplo. Este se indica con las llaves,
+`{ }`. En el último ejemplo (el conjunto de atributos), los elementos que
+hay dentro, separados por el signo de punto y coma, `;`, serían
+**atributos** (_attributes_). Dije que "existe", entre comillas, el tipo
+conjunto porque en realidad en Nix no podemos expresar un conjunto si no es
+en la estructura conjunto de atributos.
+
+Debe saber que, a veces, por comodidad, a los conjuntos de atributos los
+llaman _conjuntos_ (_sets_) a secas.
 
 Haciendo una analogía con los diccionarios de Python, cada atributo consta
 de una clave (_key_), cosa que en Nix llaman _nombre de atributo_
@@ -546,7 +558,7 @@ que evalúa a `100`.
 
 
 
-
+<!-- Segundo tutorial. A integrar con el anterior. -->
 
 ### Tipos de datos
 

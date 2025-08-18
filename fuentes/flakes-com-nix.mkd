@@ -2,29 +2,17 @@
 
 
 
-
 ### _Flakes_ y el comando `nix`
 
-Nix incorporó una funcionalidad llamada _flakes_ que supone un gran salto en
-la forma de funcionar de este. Con _flakes_ tenemos a un Nix más
-determinista y lleva un paso más allá la filosofía de Nix.
+Nix incorporó en 2021 una funcionalidad experimental llamada _flakes_ que
+supone un gran salto en el funcionamiento de este. Con _flakes_ tenemos a un
+Nix más determinista y lleva un paso más allá la filosofía de Nix.
 
 Por ejemplo, si no usa _flakes_ los paquetes que tenga serán de la versión
 que indique o TKTK.
 
 El inconveniente de usar _flakes_ es que para su uso requiere de añadir una
-capa más de conocimiento. Por tanto, lo más recomendable es que, antes de
-pasarse a usar Nix mediante la interfaz _flakes_, aprenda a usar Nix del
-modo tradicional.
-
-Para actualizar los paquetes, el comando que debe usar es
-
-```
-$ nix-channel --update
-```
-
-El inconveniente de usar _flakes_ es que para su uso requiere de añadir una
-capa más de conocimiento. Por tanto, lo más recomendable es que, antes de
+"capa" más de conocimiento. Por tanto, lo más recomendable es que, antes de
 pasarse a usar Nix mediante la interfaz _flakes_, aprenda a usar Nix del
 modo tradicional.
 
@@ -38,7 +26,16 @@ que, en la nueva (haciendo uso del comando `nix`), se usa un solo comando,
 $ nix profile list
 ```
 
-que listaría los paquetes instalados mediante Nix.
+que listaría los paquetes instalados mediante Nix, en lugar de
+
+```
+$ nix-env -q
+```
+
+
+
+
+#### Habilitar _flakes_ y el comando `nix`
 
 Si ha instalado Nix mediante la distribución de Determinate Systems, tendrá
 habilitados tanto los _flakes_ como el comando `nix`; no tendrá que hacer
