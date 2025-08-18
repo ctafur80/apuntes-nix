@@ -236,6 +236,14 @@ Bueno, esto ha fallado. A él también le falló. Vamos a usar mejor otras
 cosas distintas al conjunto de atributos `derivation`. Vamos a usar, en su
 lugar, un _helper_ llamado `runCommand` dentro de `nixpkgs`.
 
+<!--
+En el ejemplo donde falla el nix build con pkgs.bash, comentas "A él también
+le falló". Sería útil explicar brevemente por qué falla (probablemente por
+permisos del sandbox o porque pkgs.bash es una derivación y no una ruta
+directa a un ejecutable estático que el builder espera sin más
+configuración).
+-->
+
 ```nix
 let
     pkgs = import <nixpkgs> {};

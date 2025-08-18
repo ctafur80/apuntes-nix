@@ -266,7 +266,7 @@ es algo que pueda encontrarse en su uso de Nix. Es así por tratarse de un
 lenguaje funcional puro.
 
 Si deseamos hacer uso de variables en un archivo Nix, tenemos las
-**expresiones _let_** (_let expressions_). Por ejemplo,
+**expresiones _let-in_** (_let-in expressions_). Por ejemplo,
 
 ```
 nix-repl> let
@@ -275,6 +275,7 @@ nix-repl> let
                   two = "world";
               };
           in
+              my-var.one
 "hello"
 ```
 
@@ -513,10 +514,11 @@ in
     my-func { a = 9; b = 15; }
 ```
 
-que evalúa a `24`. Advierta que se tiene que poner una coma después del
-último parámetro.
+que evalúa a `24`. Advierta que hemos puesto una _trailing comma_ en el
+conjunto de atributos que usamos como parámetro de `my-func`. Esto es
+opcional, pero es una regla de estilo que se suele usar en Nix.
 
-<!-- Inherit -->
+<!-- TODO Inherit -->
 
 Las funciones en Nix cuentan también con valores predefinidos para los
 argumentos. Para esto, se usa el signo de cierre de interrogación, `?`.

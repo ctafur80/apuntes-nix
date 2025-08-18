@@ -23,6 +23,14 @@ correrá ese _software_. Esto es verdad hasta cierto punto. TKTK. Nix
 ---sobretodo con la funcionalidad [_flakes_][]--- permite acercarse más a
 esto. TKTK.
 
+<!--
+Mencionas que Nix se acerca más a la reproducibilidad, pero sería útil para
+el lector entender por qué. Por ejemplo, podrías mencionar que las imágenes
+de Docker pueden tener dependencias de sistema base que varían (p. ej.,
+apt-get update en diferentes momentos), mientras que Nix fija las versiones
+exactas de todas las dependencias.
+-->
+
 Nix surgió como una idea que presentó Eelco Dolstra en [su tesis doctoral][]
 en la Universidad de Utretch en 2006. Pero, si somos rigurosos, Dolstra creó
 tres cosas a las que se suele llamar "Nix": 1) un lenguaje específico de
@@ -51,7 +59,7 @@ Nix nos proporciona ciertas propiedades que son deseables en los entornos:
 - Comodidad a la hora de desarrollar. Como explicamos al comienzo de esta
   sección.
 
-En cuanto a lo malo, se podría incliur que Nix no es más seguro que los
+En cuanto a lo malo, se podría incluir que Nix no es más seguro que los
 contenedores OCI, ya que en principio no hacen un _sandboxing_ del entorno.
 Aun así, nada impide el uso de contenedores OCI en un entorno Nix. Hay quien
 llega a afirmar que Nix hace mejor esto que los gestores de contenedores,

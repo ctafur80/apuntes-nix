@@ -5,8 +5,8 @@
 
 No es recomendable comenzar por la documentación oficial para aprender lo
 básico sobre Nix, pues creo que es bastante inaccesible y no han puesto gran
-cuidado en que sea pedagogía. No me lo parece solo a mí; lo mismo ha
-comentado gente que sabe mucho más que yo sobre Nix.
+cuidado en que tenga un enfoque pedagógico. No me lo parece solo a mí; lo
+mismo ha comentado gente que sabe mucho más que yo sobre Nix.
 
 Personalmente, me gustó bastante la [conferencia][conferencia-replit] de un
 empleado de ReplIt. Es fácil de entender. Para adentrarse un poco más en el

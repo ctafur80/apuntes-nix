@@ -45,7 +45,7 @@ Si lo que desea es actualizar todos los paquetes que tenga instalados
 decir,
 
 ```
-$ nix profile upgrade --all
+$ nix-env --upgrade --all
 ```
 
 Buscar paquetes.
@@ -88,6 +88,13 @@ Actualizar paquetes.
 Si tiene _flakes_, no es necesario lanzar ningún comando para actualizar
 paquetes, pues TKTK.
 
+<!--
+Mencionas que no es necesario lanzar ningún comando para actualizar
+paquetes. Esto puede ser confuso. Probablemente te refieres a que el
+flake.lock fija las versiones, pero para actualizar las dependencias de los
+flakes sí se necesita un comando como nix flake update. Sería bueno
+aclararlo.
+-->
 
 
 Instalar un paquete.
@@ -109,6 +116,13 @@ Mostrar paquetes instalados
 
 ```
 $ nix profile list
+```
+
+
+Actualizar paquetes.
+
+```
+$ nix profile upgrade --all
 ```
 
 
