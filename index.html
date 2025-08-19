@@ -187,8 +187,9 @@ máquina donde correrá ese <em>software</em>. Esto es verdad hasta cierto
 punto. Por ejemplo, las imágenes de los contenedores OCI pueden tener
 dependencias del sistema base que varían; por ejemplo,
 <code>apt-get update</code> en diferentes momentos. Nix —sobretodo con
-la funcionalidad [<em>flakes</em>][]— permite acercarse más a esto, ya
-que este fija las versiones exactas de todas las dependencias.</p>
+la funcionalidad [<em>flakes</em>][flakes]— permite acercarse más a
+esto, ya que este fija las versiones exactas de todas las
+dependencias.</p>
 <p>Nix surgió como una idea que presentó Eelco Dolstra en <a
 href="https://edolstra.github.io/pubs/phd-thesis.pdf">su tesis
 doctoral</a> en la Universidad de Utretch en 2006. Pero, si somos
@@ -209,7 +210,7 @@ entornos:</p>
 <li>Reproducibilidad (<em>reproducibility</em>).</li>
 <li>Determinismo (<em>determinism</em>). Es mejor que el de los
 contenedores OCI, sobretodo cuando se habilita la funcionalidad
-[<em>flakes</em>][].</li>
+[<em>flakes</em>][flakes].</li>
 <li>Menor <q>basura</q> (<em>cruft</em>) es su sistema de archivos
 (<em>filesystem</em>). Es decir, evita que este, tras instalaciones y
 desinatalaciones, termine poblado de archivos de configuración
@@ -288,7 +289,7 @@ actualmente trabaja el propio Dolstra, el creador de Nix.</p>
 <p>Entre las ventajas que tiene esta última están que es algo más cómoda
 de instalar y de gestionar. También, se evitan los problemas que se
 tienen con la otra en sistemas Linux con SELinux habilitado. Además,
-trae habilitada de serie la funcionalidad [<em>flakes</em>][] y el
+trae habilitada de serie la funcionalidad [<em>flakes</em>][flakes] y el
 comando <code>nix</code>, aunque quizás sea preferible comenzar su
 aprendizaje de Nix sin <em>flakes</em>, ya que esto supone otra
 <q>capa</q> de conocimiento.</p>
