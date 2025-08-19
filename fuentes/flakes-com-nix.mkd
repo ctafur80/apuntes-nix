@@ -2,7 +2,7 @@
 
 
 
-### _Flakes_ y el comando `nix`
+### _Flakes_ y el comando `nix` {#flakes}
 
 Nix incorporó en 2021 una funcionalidad experimental llamada _flakes_ que
 supone un gran salto en el funcionamiento de este. Con _flakes_ tenemos a un

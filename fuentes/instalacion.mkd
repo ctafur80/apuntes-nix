@@ -27,9 +27,9 @@ Dolstra, el creador de Nix.
 Entre las ventajas que tiene esta última están que es algo más cómoda de
 instalar y de gestionar. También, se evitan los problemas que se tienen con
 la otra en sistemas Linux con SELinux habilitado. Además, trae habilitada de
-serie la funcionalidad [_flakes_][flakes] y el comando `nix`, aunque quizás
-sea preferible comenzar su aprendizaje de Nix sin _flakes_, ya que esto
-supone otra "capa" de conocimiento.
+serie la funcionalidad [_flakes_][] y el comando `nix`, aunque quizás sea
+preferible comenzar su aprendizaje de Nix sin _flakes_, ya que esto supone
+otra "capa" de conocimiento.
 
 Para hacer la instalación mediante la distribución de Determinate Systems,
 solo hay que seguir las explicaciones del repositorio [`nix-installer`][]
