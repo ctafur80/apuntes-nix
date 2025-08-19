@@ -129,12 +129,7 @@ id="toc-fuentes-de-información">Fuentes de información</a></li>
 <ul>
 <li><a href="#flakes-y-el-comando-nix"
 id="toc-flakes-y-el-comando-nix"><em>Flakes</em> y el comando
-<code>nix</code></a>
-<ul>
-<li><a href="#habilitar-flakes-y-el-comando-nix"
-id="toc-habilitar-flakes-y-el-comando-nix">Habilitar <em>flakes</em> y
-el comando <code>nix</code></a></li>
-</ul></li>
+<code>nix</code></a></li>
 </ul></li>
 <li><a href="#uso-como-gestor-de-paquetes"
 id="toc-uso-como-gestor-de-paquetes">Uso como gestor de paquetes</a>
@@ -189,15 +184,11 @@ nuevo.</p>
 herramienta que se popularizó de estos, sobre 2013— permite que el
 desarrollador disponga en su máquina de un entorno muy similar al de la
 máquina donde correrá ese <em>software</em>. Esto es verdad hasta cierto
-punto. TKTK. Nix —sobretodo con la funcionalidad [<em>flakes</em>][]—
-permite acercarse más a esto. TKTK.</p>
-<!--
-Mencionas que Nix se acerca más a la reproducibilidad, pero sería útil para
-el lector entender por qué. Por ejemplo, podrías mencionar que las imágenes
-de Docker pueden tener dependencias de sistema base que varían (p. ej.,
-apt-get update en diferentes momentos), mientras que Nix fija las versiones
-exactas de todas las dependencias.
--->
+punto. Por ejemplo, las imágenes de los contenedores OCI pueden tener
+dependencias del sistema base que varían; por ejemplo,
+<code>apt-get update</code> en diferentes momentos. Nix —sobretodo con
+la funcionalidad [<em>flakes</em>][]— permite acercarse más a esto, ya
+que este fija las versiones exactas de todas las dependencias.</p>
 <p>Nix surgió como una idea que presentó Eelco Dolstra en <a
 href="https://edolstra.github.io/pubs/phd-thesis.pdf">su tesis
 doctoral</a> en la Universidad de Utretch en 2006. Pero, si somos
@@ -328,8 +319,6 @@ comando, <code>nix</code>, junto con subcomandos. Por ejemplo,</p>
 <pre><code>$ nix profile list</code></pre>
 <p>que listaría los paquetes instalados mediante Nix, en lugar de</p>
 <pre><code>$ nix-env -q</code></pre>
-<section id="habilitar-flakes-y-el-comando-nix" class="level3">
-<h3>Habilitar <em>flakes</em> y el comando <code>nix</code></h3>
 <p>Si ha instalado Nix mediante la distribución de Determinate Systems,
 tendrá habilitados tanto los <em>flakes</em> como el comando
 <code>nix</code>; no tendrá que hacer nada a este respecto. Sin embargo,
@@ -350,7 +339,6 @@ llamado <code>nixbld</code>:</p>
 <p>Por supuesto, estamos hablando de sistemas de tipo Unix, como, por
 ejemplo, Linux y macOS. En Windows, para instalar Nix deberá hacer uso
 de WSL2.</p>
-</section>
 </section>
 </section>
 <section id="uso-como-gestor-de-paquetes" class="level1">
@@ -464,7 +452,7 @@ se trata de tipado fuerte (<em>strongly typed</em>), pero aun así no
 cuenta con tipado estático, sino dinámico (<em>dynamic typed</em>).</p>
 <section id="tipos-simples" class="level3">
 <h3>Tipos simples</h3>
-<!-- De hecho, no sé si se pueden crear tipos propios. -->
+<!-- TODO De hecho, no sé si se pueden crear tipos propios. -->
 <p>Cuenta con varios tipos de datos predefinidos (<em>built-in</em>,
 también llamados <em>primitivos</em>). Los tipos de datos simples
 (también llamados <em>atómicos</em>) son: entero (<em>integer</em>),</p>
@@ -676,8 +664,8 @@ nix-repl&gt; rec { a = 5; b = a + 5; }
 </section>
 <section id="listas" class="level3">
 <h3>Listas</h3>
-<p>Volvamos a las listas. Tal y como dijimos, también pueden ser
-heterogéneas:</p>
+<p>Otro tipo de datos predefinido no simple son las listas. Estas pueden
+ser heterogéneas:</p>
 <div class="sourceCode" id="cb42"><pre
 class="sourceCode nix"><code class="sourceCode nix"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span> <span class="st">&quot;hello&quot;</span> <span class="dv">4</span> <span class="cn">true</span> <span class="op">]</span></span></code></pre></div>
 <p>La separación de los elementos en la lista se marca con espacios.
@@ -714,7 +702,8 @@ distintas a las listas; por ejemplo, en conjuntos de atributos:</p>
 <section id="funciones" class="level3">
 <h3>Funciones</h3>
 <p>Ahora, pasemos a las funciones, ya que Nix es un lenguaje funcional
-puro. Veamos primero una función muy sencilla:</p>
+puro y, por tanto, son muy importantes. Veamos primero una función muy
+sencilla:</p>
 <pre><code>nix-repl&gt; my-func = a: a + 1
 
 nix-repl&gt; my-func 3
