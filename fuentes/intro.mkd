@@ -19,17 +19,11 @@ adaptación del _software_ al entorno nuevo.
 La llegada de los contenedores OCI ---siendo Docker la primera herramienta
 que se popularizó de estos, sobre 2013--- permite que el desarrollador
 disponga en su máquina de un entorno muy similar al de la máquina donde
-correrá ese _software_. Esto es verdad hasta cierto punto. TKTK. Nix
+correrá ese _software_. Esto es verdad hasta cierto punto. Por ejemplo, las
+imágenes de los contenedores OCI pueden tener dependencias del sistema base
+que varían; por ejemplo, `apt-get update` en diferentes momentos. Nix
 ---sobretodo con la funcionalidad [_flakes_][]--- permite acercarse más a
-esto. TKTK.
-
-<!--
-Mencionas que Nix se acerca más a la reproducibilidad, pero sería útil para
-el lector entender por qué. Por ejemplo, podrías mencionar que las imágenes
-de Docker pueden tener dependencias de sistema base que varían (p. ej.,
-apt-get update en diferentes momentos), mientras que Nix fija las versiones
-exactas de todas las dependencias.
--->
+esto, ya que este fija las versiones exactas de todas las dependencias.
 
 Nix surgió como una idea que presentó Eelco Dolstra en [su tesis doctoral][]
 en la Universidad de Utretch en 2006. Pero, si somos rigurosos, Dolstra creó

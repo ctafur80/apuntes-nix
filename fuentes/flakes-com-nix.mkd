@@ -32,11 +32,6 @@ que listaría los paquetes instalados mediante Nix, en lugar de
 $ nix-env -q
 ```
 
-
-
-
-#### Habilitar _flakes_ y el comando `nix`
-
 Si ha instalado Nix mediante la distribución de Determinate Systems, tendrá
 habilitados tanto los _flakes_ como el comando `nix`; no tendrá que hacer
 nada a este respecto. Sin embargo, si ha hecho la instalación tradicional,

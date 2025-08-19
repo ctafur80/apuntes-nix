@@ -81,7 +81,7 @@ estático, sino dinámico (_dynamic typed_).
 
 #### Tipos simples
 
-<!-- De hecho, no sé si se pueden crear tipos propios. -->
+<!-- TODO De hecho, no sé si se pueden crear tipos propios. -->
 
 Cuenta con varios tipos de datos predefinidos (_built-in_, también llamados
 _primitivos_). Los tipos de datos simples (también llamados _atómicos_) son:
@@ -377,7 +377,8 @@ nix-repl> rec { a = 5; b = a + 5; }
 
 #### Listas
 
-Volvamos a las listas. Tal y como dijimos, también pueden ser heterogéneas:
+Otro tipo de datos predefinido no simple son las listas. Estas pueden ser
+heterogéneas:
 
 ```nix
 [ "hello" 4 true ]
@@ -431,8 +432,8 @@ nix-repl> with { a = 5; b = 6; c = 7; }; { five = a; six = b; }
 
 #### Funciones
 
-Ahora, pasemos a las funciones, ya que Nix es un lenguaje funcional puro.
-Veamos primero una función muy sencilla:
+Ahora, pasemos a las funciones, ya que Nix es un lenguaje funcional puro y,
+por tanto, son muy importantes. Veamos primero una función muy sencilla:
 
 ```
 nix-repl> my-func = a: a + 1
